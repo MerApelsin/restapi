@@ -1,5 +1,5 @@
 function main(){
-  fetch('api/todos')
+  fetch('api/entries')
     .then(res => res.json())
     .then(console.log);
 }
@@ -10,12 +10,16 @@ function getAllUsers(){
     .then(console.log);
 }
 
-function postTodo(){
+function postEntry(){
   // x-www-form-urlencoded
   const formData = new FormData();
-  const todoInput = document.getElementById('todoInput');
-  formData.append('content', todoInput.value);
+  const entryTitle = document.getElementById('entryTitleInput');
+  const entryContent = document.getElementById('entryContentInput');
+  formData.append('title', entryTitle.value);
+  formData.append('content', entryContent.value);
+  formData.append('createdBy', 1);
 
+  //for( let [key,value] of formData.entries()) { console.log(key,value);}
   const postOptions = {
     method: 'POST',
     body: formData,
@@ -23,10 +27,12 @@ function postTodo(){
     credentials: 'include'
   }
 
-  fetch('api/todos', postOptions)
+  fetch('api/entries', postOptions)
     .then(res => res.json())
-    .then((newTodo) => {
-        document.body.insertAdjacentHTML('beforeend', newTodo.data.content);
+    .then((newEntry) => {
+        document.body.insertAdjacentHTML('beforeend', newEntry.data.content);
+        console.log(res);
+        window.stop();
     });
 }
 
@@ -47,11 +53,11 @@ function login(){
     .then(console.log);
 }
 
-const form = document.getElementById('newTodo');
+/*const form = document.getElementById('newEntry');
 form.addEventListener('submit', function (e) {
   e.preventDefault();
   const formData = new FormData(this);
-});
+});*/
 
-const addTodoButton = document.getElementById('addTodo');
-addTodoButton.addEventListener('click', postTodo);
+const addEntryButton = document.getElementById('addEntry');
+addEntryButton.addEventListener('click', postEntry);

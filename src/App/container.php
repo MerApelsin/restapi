@@ -70,9 +70,9 @@ $container['view'] = function ($container) {
  * as calling $this->get('db') in our routes in index.php
  */
 
-$container['todos'] = function ($c) {
-    $todosController = new TodoController($c->get('db'));
-    return $todosController;
+$container['entries'] = function ($c) {
+    $entriesController = new \App\Controllers\EntriesController($c->get('db'));
+    return $entriesController;
 };
 
 $container['users'] = function ($c) {

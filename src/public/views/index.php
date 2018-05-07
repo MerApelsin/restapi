@@ -11,14 +11,19 @@
 
 <body>
   <h1>Frontpage</h1>
-  <input type="text" id="todoInput">
-  <button id="addTodo">Add Todo</button>
+  <!-- <input type="text" id="entryTitleInput">
+  <input type="text" id="entryContentInput">
+  <button id="addEntry">Add Entry</button> -->
 
-  <form action="" id="newTodo">
-    <input type="text" name="content">
-    <input type="submit">
+  <form action="" id="newEntry">
+    <input type="text" id="entryTitleInput">
+    <input type="text" id="entryContentInput">
+    <!--<button id="addEntry">Add Entry</button> -->
+    <!-- <input type="text" name="content">
+    --><input type="submit" id="addEntry">
   </form>
   <script src="scripts/main.js"></script>
+
 </body>
 
 </html>

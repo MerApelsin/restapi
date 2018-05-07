@@ -2,7 +2,7 @@
 
 namespace App\Controllers;
 
-class TodoController
+class EntriesController
 {
     private $db;
 
@@ -12,7 +12,7 @@ class TodoController
      * into the class at start. If we do this TodoController will be able to easily
      * reference the PDO with '$this->db' in ALL functions INSIDE the class
      * This class is later being injected into our container inside of 'App/container.php'
-     * This results in we being able to call '$this->get('Todos')' to call this class
+     * This results in we being able to call '$this->get('entries')' to call this class
      * inside of our routes.
      */
     public function __construct(\PDO $pdo)
@@ -22,31 +22,33 @@ class TodoController
 
     public function getAll()
     {
-        $getAll = $this->db->prepare('SELECT * FROM todos');
+        $getAll = $this->db->prepare('SELECT * FROM entries');
         $getAll->execute();
         return $getAll->fetchAll();
     }
 
     public function getOne($id)
     {
-        $getOne = $this->db->prepare('SELECT * FROM todos WHERE id = :id');
+        $getOne = $this->db->prepare('SELECT * FROM entries WHERE id = :id');
         $getOne->execute([':id' => $id]);
         return $getOne->fetch();
     }
 
-    public function add($todo)
+    public function add($entry)
     {
         /**
          * Default 'completed' is false so we only need to insert the 'content'
          */
         $addOne = $this->db->prepare(
-            'INSERT INTO todos (content) VALUES (:content)'
+            'INSERT INTO entries (title, content, createdBy) VALUES (:title, :content, :createdBy)'
         );
 
         /**
          * Insert the value from the parameter into the database
          */
-        $addOne->execute([':content'  => $todo['content']]);
+        $addOne->execute([':title' => $entry['title'],
+          ':content'  => $entry['content'],
+          ':createdBy' => $entry['createdBy']]);
 
         /**
          * A INSERT INTO does not return the created object. If we want to return it to the user
@@ -55,7 +57,8 @@ class TodoController
          */
         return [
           'id'          => (int)$this->db->lastInsertId(),
-          'content'     => $todo['content'],
+          'title'       => $entry['title'],
+          'content'     => $entry['content'],
           'completed'   => false
         ];
     }
