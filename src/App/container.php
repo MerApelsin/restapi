@@ -3,7 +3,7 @@
 /**
  * We rename or make a shortcut to the TodoController
  */
-use \App\Controllers\TodoController as TodoController;
+use \App\Controllers\EntriesController as EntriesController;
 
 require_once 'ConfigHandler.php';
 
@@ -78,6 +78,10 @@ $container['entries'] = function ($c) {
 $container['users'] = function ($c) {
     $userControllers = new \App\Controllers\UserController($c->get('db'));
     return $userControllers;
+};
+$container['comments'] = function ($c) {
+    $commentsControllers = new \App\Controllers\CommentsController($c->get('db'));
+    return $commentsControllers;
 };
 
 return $container;

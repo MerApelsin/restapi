@@ -10,6 +10,63 @@ function getAllUsers(){
     .then(console.log);
 }
 
+function getAllEntries(){
+  fetch('api/entries')
+  .then(res => res.json())
+  .then(res => {
+      
+      for (let i = 0; i < res.data.length; i++)
+        {
+          const article = document.createElement("post-wrapper");
+          article.setAttribute("class", "post-wrapper");
+          const tag1 = document.createElement("h4");
+          /*tag1.setAttribute("class", "post-wrapper");*/
+          const text1 = res.data[i].title;
+          const textNode1 = document.createTextNode(text1);
+          tag1.appendChild(textNode1);
+          article.appendChild(tag1);
+          document.getElementById("getPosts-wrapper").appendChild(article);
+          
+          const content = document.createElement("p");
+          const text2 = res.data[i].content; 
+          const textNode2 = document.createTextNode(text2);
+          content.appendChild(textNode2);
+          article.appendChild(content);
+          document.getElementById("getPosts-wrapper").appendChild(article);
+
+          const commentsInput = document.createElement("textarea");
+          commentsInput.setAttribute("type", "text");
+          commentsInput.setAttribute("class", "textarea");
+          const commentButton = document.createElement("button");
+          commentButton.innerHTML ="Make a comment";
+          //Add Eventlistner...// res.data[i].entryID
+          article.appendChild(commentsInput);
+          article.appendChild(commentButton);
+
+          const btnWrapper = document.createElement("btn-wrapper");
+          btnWrapper.setAttribute("class","btn-wrapper");
+          const updateBtn = document.createElement("input");
+          updateBtn.setAttribute("type", "button");
+          updateBtn.setAttribute("value", "Update");
+          updateBtn.setAttribute("class", "btn");
+          btnWrapper.appendChild(updateBtn);
+
+          const deleteBtn = document.createElement("input");
+          deleteBtn.setAttribute("type", "button");
+          deleteBtn.setAttribute("value", "delete");
+          deleteBtn.setAttribute("class", "btn");
+          btnWrapper.appendChild(deleteBtn);
+
+          const commentBtn = document.createElement("input");
+          commentBtn.setAttribute("type", "button");
+          commentBtn.setAttribute("value", "comment");
+          commentBtn.setAttribute("class", "btn");
+          btnWrapper.appendChild(commentBtn);
+
+          article.appendChild(btnWrapper);
+        }
+    });
+}
 function postEntry(){
   // x-www-form-urlencoded
   const formData = new FormData();

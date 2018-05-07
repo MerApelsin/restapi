@@ -129,6 +129,10 @@ $app->group('/api', function () use ($app) {
         $allUsers = $this->users->getOne($args['id']);
         return $response->withJson($allUsers);
     });
+        $app->get('/comments', function ($request, $response, $args) {
+        $allComments = $this->comments->getAll();
+        return $response->withJson($allComments);
+    });
 });
 
 $app->run();
