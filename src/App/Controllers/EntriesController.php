@@ -39,8 +39,10 @@ class EntriesController
         /**
          * Default 'completed' is false so we only need to insert the 'content'
          */
+        $newDate= date("Y-m-d H:i:s", strtotime('+2 hours'));
+
         $addOne = $this->db->prepare(
-            'INSERT INTO entries (title, content, createdBy) VALUES (:title, :content, :createdBy)'
+            'INSERT INTO entries (title, content, createdBy, createdAt) VALUES (:title, :content, :createdBy, :createdAt)'
         );
 
         /**
@@ -48,7 +50,9 @@ class EntriesController
          */
         $addOne->execute([':title' => $entry['title'],
           ':content'  => $entry['content'],
-          ':createdBy' => $entry['createdBy']]);
+          ':createdBy' => $entry['createdBy'],
+          ':createdAt' => $newDate
+          ]);
 
         /**
          * A INSERT INTO does not return the created object. If we want to return it to the user
