@@ -119,6 +119,16 @@ $app->group('/api', function () use ($app) {
         $newEntry = $this->entries->add($body);
         return $response->withJson(['data' => $newEntry]);
     });
+        $app->post('/users', function ($request, $response, $args) {
+        /**
+         * Everything sent in 'body' when doing a POST-request can be
+         * extracted with 'getParsedBody()' from the request-object
+         * https://www.slimframework.com/docs/v3/objects/request.html#the-request-body
+         */
+        $body = $request->getParsedBody();
+        $newUser = $this->users->add($body);
+        return $response->withJson(['data' => $newUser]);
+    });
 
     $app->get('/users', function ($request, $response, $args) {
         $allUsers = $this->users->getAll();

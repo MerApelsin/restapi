@@ -11,6 +11,18 @@
 
 <body>
   <h1>cms</h1>
+    <div class = "form-wrapper">
+     <div class = "post-newEntry">
+      <h2>Add User</h2>
+        <form action="" id="newUser">
+          <input type="text" id="usernameInput" placeholder="Username">
+          <input type="password" id="passwordInput" placeholder="Password">
+    <!--<button id="addEntry">Add Entry</button> -->
+    <!-- <input type="text" name="content">
+       --><input type="submit" id="addUser">
+        </form>
+     </div><!--end of post-newEntry-->
+  </div><!--End of formwrapper-->
   <!-- <input type="text" id="entryTitleInput">
   <input type="text" id="entryContentInput">
   <button id="addEntry">Add Entry</button> -->
@@ -31,10 +43,9 @@
    </div><!--End of form wrapper-->
     <div class="getIt">
        <h2>Get users and todos</h2>
-          <p>Update, Comment or delete</p>
+          <p>Update, comment or delete</p>
     <div class="button-wrapper">
-<button onclick="getAllEntries()" id="getEntries">Get all Todos</button>
-<button onclick="get2Todos()" id="get2Todos">Get 2 Todos</button>
+<button onclick="getAllEntries()" id="getEntries">Get all Entries</button>
 <button onclick="getAllUsers()" id="getUsers">Get All Users</button>
 </div>
 </div><!--End of getIt-->

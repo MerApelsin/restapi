@@ -7,8 +7,39 @@ function main(){
 function getAllUsers(){
   fetch('api/users')
     .then(res => res.json())
-    .then(console.log);
+        .then(res => {  
+   for (let i = 0; i < res.length; i++)
+        {
+         /* document.body.append(res.data[i].content);*/
+          const article = document.createElement("post-wrapper");
+          article.setAttribute("class", "post-wrapper");
+          const tag1 = document.createElement("h4");
+          /*tag1.setAttribute("class", "post-wrapper");*/
+          const text1 = res[i].username;
+          const textNode1 = document.createTextNode(text1);
+          tag1.appendChild(textNode1);
+          article.appendChild(tag1);
+          document.getElementById("getPosts-wrapper").appendChild(article);
+
+          const btnWrapper = document.createElement("btn-wrapper");
+          btnWrapper.setAttribute("class","btn-wrapper");
+          const updateBtn = document.createElement("input");
+          updateBtn.setAttribute("type", "button");
+          updateBtn.setAttribute("value", "Update");
+          updateBtn.setAttribute("class", "btn");
+          btnWrapper.appendChild(updateBtn);
+
+          const deleteBtn = document.createElement("input");
+          deleteBtn.setAttribute("type", "button");
+          deleteBtn.setAttribute("value", "delete");
+          deleteBtn.setAttribute("class", "btn");
+          btnWrapper.appendChild(deleteBtn);
+
+          article.appendChild(btnWrapper);
+        }
+    });
 }
+
 
 function getAllEntries(){
   fetch('api/entries')
@@ -67,6 +98,7 @@ function getAllEntries(){
         }
     });
 }
+
 function postEntry(){
   // x-www-form-urlencoded
   const formData = new FormData();
@@ -91,6 +123,26 @@ function postEntry(){
         console.log(res);
         window.stop();
     });
+}
+function postUser(){
+  // x-www-form-urlencoded
+  const formData = new FormData();
+  const username = document.getElementById('usernameInput');
+  const password = document.getElementById('passwordInput');
+  formData.append('username', username.value);
+  formData.append('password', password.value);
+
+  //for( let [key,value] of formData.entries()) { console.log(key,value);}
+  const postOptions = {
+    method: 'POST',
+    body: formData,
+    // MUCH IMPORTANCE!
+    credentials: 'include'
+  }
+
+  fetch('api/users', postOptions)
+    .then(res => res.json())
+    .then(console.log);
 }
 
 
@@ -118,3 +170,6 @@ form.addEventListener('submit', function (e) {
 
 const addEntryButton = document.getElementById('addEntry');
 addEntryButton.addEventListener('click', postEntry);
+
+const addUserButton = document.getElementById('addUser');
+addUserButton.addEventListener('click', postUser);
