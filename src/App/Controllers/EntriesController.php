@@ -20,10 +20,10 @@ class EntriesController
         $this->db = $pdo;
     }
 
-    public function getAll()
+    public function getAll(/*$limit*/)
     {
-        $getAll = $this->db->prepare('SELECT * FROM entries');
-        $getAll->execute();
+        $getAll = $this->db->prepare('SELECT * FROM entries /*LIMIT :limit*/');
+        $getAll->execute(/*[':limit' => $limit]*/);
         return $getAll->fetchAll();
     }
 
@@ -32,6 +32,13 @@ class EntriesController
         $getOne = $this->db->prepare('SELECT * FROM entries WHERE entryID = :id');
         $getOne->execute([':id' => $id]);
         return $getOne->fetch();
+    }
+
+    public function deleteOne($id)
+    {
+        $deleteOne = $this->db->prepare('DELETE FROM entries WHERE entryID = :id');
+        $deleteOne->execute([':id' => $id]);
+      /*  return $deleteOne->fetch();*/
     }
 
     public function add($entry)

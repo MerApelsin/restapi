@@ -11,16 +11,33 @@
 
 <body>
   <h1>cms</h1>
-    <div class = "form-wrapper">
-     <div class = "post-newEntry">
-      <h2>Add User</h2>
-        <form action="" id="newUser">
+
+  <div class = "form-wrapper">
+      <div class = "register">
+        <h2>Register</h2>
+           <form action="" id="newUser">
           <input type="text" id="usernameInput" placeholder="Username">
           <input type="password" id="passwordInput" placeholder="Password">
     <!--<button id="addEntry">Add Entry</button> -->
     <!-- <input type="text" name="content">
        --><input type="submit" id="addUser">
         </form>
+      </div><!--End of register-->
+
+      <div class = "signin">
+        <h2>Sign in</h2>
+          <form action="partials/signin.php" method="POST"><!--ändra form action-->
+            <label for="username">Username</label>
+            <input type="text" name="username" placeholder="Username">
+            <label for="password">Password</label>
+            <input type="password" name="password" placeholder="Password">
+            <input type="submit" value="Sign in">
+          </form>
+      </div><!--End of Sign in-->
+</div><!--form-wrapper-->
+
+
+  
      </div><!--end of post-newEntry-->
   </div><!--End of formwrapper-->
   <!-- <input type="text" id="entryTitleInput">

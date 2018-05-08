@@ -20,22 +20,6 @@ function getAllUsers(){
           tag1.appendChild(textNode1);
           article.appendChild(tag1);
           document.getElementById("getPosts-wrapper").appendChild(article);
-
-          const btnWrapper = document.createElement("btn-wrapper");
-          btnWrapper.setAttribute("class","btn-wrapper");
-          const updateBtn = document.createElement("input");
-          updateBtn.setAttribute("type", "button");
-          updateBtn.setAttribute("value", "Update");
-          updateBtn.setAttribute("class", "btn");
-          btnWrapper.appendChild(updateBtn);
-
-          const deleteBtn = document.createElement("input");
-          deleteBtn.setAttribute("type", "button");
-          deleteBtn.setAttribute("value", "delete");
-          deleteBtn.setAttribute("class", "btn");
-          btnWrapper.appendChild(deleteBtn);
-
-          article.appendChild(btnWrapper);
         }
     });
 }
@@ -66,12 +50,18 @@ function getAllEntries(){
           document.getElementById("getPosts-wrapper").appendChild(article);
 
           const commentsInput = document.createElement("textarea");
-          commentsInput.setAttribute("type", "text");
           commentsInput.setAttribute("class", "textarea");
-          const commentButton = document.createElement("button");
-          commentButton.innerHTML ="Make a comment";
-          //Add Eventlistner...// res.data[i].entryID
+          commentsInput.setAttribute("id", "commentsInput");
           article.appendChild(commentsInput);
+
+          const commentButton = document.createElement("input");
+          commentButton.setAttribute("type", "submit");
+          commentButton.setAttribute("id", "addComment");
+          commentButton.innerHTML ="Make a comment";
+          /*commentButton.addEventListener("click", postComment());*/
+        commentButton.setAttribute( "onClick", "postComment();");
+           /*commentButton.onclick = function(){postComment();}*/
+          //Add Eventlistner..".// res.data[i].entryID*/
           article.appendChild(commentButton);
 
           const btnWrapper = document.createElement("btn-wrapper");
@@ -80,6 +70,7 @@ function getAllEntries(){
           updateBtn.setAttribute("type", "button");
           updateBtn.setAttribute("value", "Update");
           updateBtn.setAttribute("class", "btn");
+
           btnWrapper.appendChild(updateBtn);
 
           const deleteBtn = document.createElement("input");
@@ -145,6 +136,26 @@ function postUser(){
     .then(console.log);
 }
 
+function postComment(){
+  // x-www-form-urlencoded
+  const formData = new FormData();
+  const comment = document.getElementById('commentsInput');// from texarea.
+  formData.append('comment', comment.value);
+
+  for( let [key,value] of formData.entries()) { console.log(key,value);}
+  const postOptions = {
+    method: 'POST',
+    body: formData,
+    // MUCH IMPORTANCE!
+    credentials: 'include'
+  }
+
+  fetch('api/comments', postOptions)//
+    .then(res => res.json())
+    .then(console.log);
+}
+
+
 
 function login(){
   const formData = new FormData();
@@ -173,3 +184,6 @@ addEntryButton.addEventListener('click', postEntry);
 
 const addUserButton = document.getElementById('addUser');
 addUserButton.addEventListener('click', postUser);
+/*
+const addCommentButton = document.getElementById('addComment');
+addCommentButton.addEventListener('click', postComment);*/

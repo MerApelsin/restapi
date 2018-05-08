@@ -76,6 +76,7 @@ $app->get('/logout', function ($request, $response, $args) {
  * This was done so that we can check if the user is authed when calling '/api'
  * but we don't have to check for auth when calling '/signin'
  */
+
 $app->group('/api', function () use ($app) {
 
     // GET http://localhost:XXXX/api/todos
@@ -86,6 +87,7 @@ $app->group('/api', function () use ($app) {
          * inside our routes.
          */
         // $this === $app
+
         $allEntries = $this->entries->getAll();
         /**
          * Wrapping the data when returning as a safety thing
@@ -105,6 +107,12 @@ $app->group('/api', function () use ($app) {
          */
         $id = $args['id'];
         $singleEntry = $this->entries->getOne($id);
+        return $response->withJson(['data' => $singleEntry]);
+    });
+        $app->delete('/entries/{id}', function ($request, $response, $args) {
+
+        $id = $args['id'];
+        $singleEntry = $this->entries->deleteOne($id);
         return $response->withJson(['data' => $singleEntry]);
     });
 
@@ -139,9 +147,26 @@ $app->group('/api', function () use ($app) {
         $allUsers = $this->users->getOne($args['id']);
         return $response->withJson($allUsers);
     });
+
+    //Comments
         $app->get('/comments', function ($request, $response, $args) {
         $allComments = $this->comments->getAll();
         return $response->withJson($allComments);
+    });
+        $app->get('/comments/{id}', function ($request, $response, $args) {
+        $allUsers = $this->comments->getOne($args['id']);
+        return $response->withJson($allUsers);
+    });
+        $app->post('/comments', function ($request, $response, $args) {
+        $body = $request->getParsedBody();
+        $newComment = $this->comments->add($body);
+        return $response->withJson(['data' => $newComment]);
+    });
+        $app->delete('/comments/{id}', function ($request, $response, $args) {
+
+        $id = $args['id'];
+        $singleEntry = $this->comments->deleteOne($id);
+        return $response->withJson(['data' => $singleEntry]);
     });
 });
 

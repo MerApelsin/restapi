@@ -25,30 +25,32 @@ class CommentsController
         return $getOne->fetch();
     }
 
-    public function add($entry)
+    public function deleteOne($id)
     {
-        /**
-         * Default 'completed' is false so we only need to insert the 'content'
-         */
+        $deleteOne = $this->db->prepare('DELETE FROM comments WHERE commentID = :id');
+        $deleteOne->execute([':id' => $id]);
+      /*  return $deleteOne->fetch();*/
+    }
+
+    public function add($comments)
+    {
+         $newDate= date("Y-m-d H:i:s", strtotime('+2 hours'));
+
         $addOne = $this->db->prepare(
-            'INSERT INTO comments (content, createdBy) VALUES (:content, :createdBy)'
+            'INSERT INTO comments (entryID, content, createdBy, createdAt) VALUES (:entryID, :content, :createdBy, :createdAt)'
         );
 
-        /**
-         * Insert the value from the parameter into the database
-         */
-        $addOne->execute([':content'  => $entry['content'],
-          ':createdBy' => $entry['createdBy']]);
+        $addOne->execute([':entryID' => 1, 
+           ':content'  => $comments['content'],
+          ':createdBy' => $comments['createdBy'],
+          ':createdAt' => $newDate
+          ]);
 
-        /**
-         * A INSERT INTO does not return the created object. If we want to return it to the user
-         * that has posted the todo we must build it ourself or fetch it after we have inserted it
-         * We can always get the last inserted row in a database by calling 'lastInsertId()'-function
-         */
         return [
-          'id'          => (int)$this->db->lastInsertId(),
-          'content'     => $entry['content'],
-          'completed'   => false
+         /* 'id'          => (int)$this->db->lastInsertId(),*/
+          ':content'     => $entry['content'],
+          ':createdBy'  => $comments['createdBy'], 
+          ':createdAt' => $newDate
         ];
     }
 }
