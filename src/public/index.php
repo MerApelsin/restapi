@@ -111,15 +111,14 @@ $app->group('/api', function () use ($app) {
             $limit = $query['limit'];
         }
         else{
-             $limit= 20; 
+             $limit= 20;
         }
-
 
         if (isset($query['title'])){
             $title = $query['title'];
         }
 
-        $allEntries = $this->entries->getAll($limit);
+        $allEntries = $this->entries->getAll($limit, $title);
         /**
          * Wrapping the data when returning as a safety thing
          * https://www.owasp.org/index.php/AJAX_Security_Cheat_Sheet#Server_Side
@@ -169,7 +168,7 @@ $app->group('/api', function () use ($app) {
             $allUsers = $this->users->getAll($limit);
             return $response->withJson($allUsers);
         }
-        else 
+        else
         {
             $allUsers = $this->users->getAll();
             return $response->withJson($allUsers);
@@ -189,7 +188,7 @@ $app->group('/api', function () use ($app) {
             $limit = $query['limit'];
         }
         else{
-             $limit= 20; 
+             $limit= 20;
         }
 
         $allComments = $this->comments->getAll($limit);
