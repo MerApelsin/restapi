@@ -13,10 +13,23 @@ class UserController
 
     public function getAll()
     {
-        $getAllUsers = $this->db->prepare("SELECT * FROM users");
-        $getAllUsers->execute();
-        $allUsers = $getAllUsers->fetchAll();
-        return $allUsers;
+        $argss = func_num_args();// array of parameters.
+
+        if ($argss > 0){
+            $limit = func_get_arg(0);
+            $getAllUsers = $this->db->prepare("SELECT * FROM users LIMIT :limit");
+            $getAllUsers->bindParam(':limit', $limit, \PDO::PARAM_INT);
+            $getAllUsers->execute();
+            $allUsers = $getAllUsers->fetchAll();
+            return $allUsers; 
+        }
+        else
+        {
+            $getAllUsers = $this->db->prepare("SELECT * FROM users");
+            $getAllUsers->execute();
+            $allUsers = $getAllUsers->fetchAll();
+            return $allUsers;
+        }
     }
 
     public function getOne($id)
@@ -48,7 +61,8 @@ class UserController
         return [
          /* 'id'          => (int)$this->db->lastInsertId(),*/
           'username' => $user['username'],
-          'password' => $user['password']
+          'password' => $user['password'],
+          'createdAt' => $newDate['createdAt']
         
           ];
 

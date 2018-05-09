@@ -26,16 +26,17 @@
 
       <div class = "signin">
         <h2>Sign in</h2>
-          <form action="partials/signin.php" method="POST"><!--ändra form action-->
+          <form action="" id="login"><!--ändra form action-->
             <label for="username">Username</label>
-            <input type="text" name="username" placeholder="Username">
+            <input type="text" name="username" id="loginUserInput" placeholder="Username">
             <label for="password">Password</label>
-            <input type="password" name="password" placeholder="Password">
-            <input type="submit" value="Sign in">
+            <input type="password" name="password" id="loginPassInput" placeholder="Password">
+            <input type="submit" value="Sign in" id="loginBtn">
           </form>
       </div><!--End of Sign in-->
 </div><!--form-wrapper-->
 
+      <button onclick="logout()">Logout</button>
 
   
      </div><!--end of post-newEntry-->

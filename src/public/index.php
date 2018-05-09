@@ -27,7 +27,16 @@ require '../App/cors.php';
 /********************************
  *          ROUTES              *
  ********************************/
-
+   $app->post('/register', function ($request, $response, $args) {
+        /**
+         * Everything sent in 'body' when doing a POST-request can be
+         * extracted with 'getParsedBody()' from the request-object
+         * https://www.slimframework.com/docs/v3/objects/request.html#the-request-body
+         */
+        $body = $request->getParsedBody();
+        $newUser = $this->users->add($body);
+        return $response->withJson(['data' => $newUser]);
+    });
 
 $app->get('/', function ($request, $response, $args) {
     /**
@@ -53,30 +62,38 @@ $app->post('/login', function ($request, $response, $args) {
         ':username' => $body['username']
     ]);
     $user = $fetchUserStatement->fetch();
+       /*  die(var_dump($_SESSION));*/
     if (password_verify($body['password'], $user['password'])) {
         $_SESSION['loggedIn'] = true;
-        $_SESSION['userID'] = $user['id'];
-        return $response->withJson(['data' => [ $user['id'], $user['username'] ]]);
+        $_SESSION['userID'] = $user['userID'];
+        if(isset($_SESSION['loggedIn'])){
+        /*    return $response->withJson('logged in is set');*/
+        }
+        return $response->withJson(['data' => [ $user['userID'], $user['username'] ]]);
     }
     return $response->withJson(['error' => 'wrong password']);
 });
+
 
 /**
  * Basic implementation, implement a better response
  */
 $app->get('/logout', function ($request, $response, $args) {
     // No request data is being sent
+    if($_SESSION['loggedIn'] == true){
     session_destroy();
     return $response->withJson('Success');
+    }
+    else{
+        return $response->withJson('You are not login!!');
+    }
 });
-
 
 /**
  * The group is used to group everything connected to the API under '/api'
  * This was done so that we can check if the user is authed when calling '/api'
  * but we don't have to check for auth when calling '/signin'
  */
-
 $app->group('/api', function () use ($app) {
 
     // GET http://localhost:XXXX/api/todos
@@ -87,8 +104,22 @@ $app->group('/api', function () use ($app) {
          * inside our routes.
          */
         // $this === $app
+      /*  $executeParams = [];*/
+        $query = $request->getQueryParams();
 
-        $allEntries = $this->entries->getAll();
+        if (isset($query['limit'])){
+            $limit = $query['limit'];
+        }
+        else{
+             $limit= 20; 
+        }
+
+
+        if (isset($query['title'])){
+            $title = $query['title'];
+        }
+
+        $allEntries = $this->entries->getAll($limit);
         /**
          * Wrapping the data when returning as a safety thing
          * https://www.owasp.org/index.php/AJAX_Security_Cheat_Sheet#Server_Side
@@ -116,6 +147,7 @@ $app->group('/api', function () use ($app) {
         return $response->withJson(['data' => $singleEntry]);
     });
 
+
     // POST http://localhost:XXXX/api/todos
     $app->post('/entries', function ($request, $response, $args) {
         /**
@@ -127,20 +159,21 @@ $app->group('/api', function () use ($app) {
         $newEntry = $this->entries->add($body);
         return $response->withJson(['data' => $newEntry]);
     });
-        $app->post('/users', function ($request, $response, $args) {
-        /**
-         * Everything sent in 'body' when doing a POST-request can be
-         * extracted with 'getParsedBody()' from the request-object
-         * https://www.slimframework.com/docs/v3/objects/request.html#the-request-body
-         */
-        $body = $request->getParsedBody();
-        $newUser = $this->users->add($body);
-        return $response->withJson(['data' => $newUser]);
-    });
+    // Users
 
     $app->get('/users', function ($request, $response, $args) {
-        $allUsers = $this->users->getAll();
-        return $response->withJson($allUsers);
+        $query = $request->getQueryParams();
+
+        if (isset($query['limit'])){
+            $limit = $query['limit'];
+            $allUsers = $this->users->getAll($limit);
+            return $response->withJson($allUsers);
+        }
+        else 
+        {
+            $allUsers = $this->users->getAll();
+            return $response->withJson($allUsers);
+        }
     });
 
     $app->get('/users/{id}', function ($request, $response, $args) {
@@ -150,7 +183,16 @@ $app->group('/api', function () use ($app) {
 
     //Comments
         $app->get('/comments', function ($request, $response, $args) {
-        $allComments = $this->comments->getAll();
+        $query = $request->getQueryParams();
+
+        if (isset($query['limit'])){
+            $limit = $query['limit'];
+        }
+        else{
+             $limit= 20; 
+        }
+
+        $allComments = $this->comments->getAll($limit);
         return $response->withJson($allComments);
     });
         $app->get('/comments/{id}', function ($request, $response, $args) {
@@ -168,6 +210,6 @@ $app->group('/api', function () use ($app) {
         $singleEntry = $this->comments->deleteOne($id);
         return $response->withJson(['data' => $singleEntry]);
     });
-});
+});/*->add($auth);*/
 
 $app->run();

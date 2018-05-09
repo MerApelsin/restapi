@@ -11,9 +11,10 @@ class CommentsController
         $this->db = $pdo;
     }
 
-    public function getAll()
+    public function getAll($limit)
     {
-        $getAll = $this->db->prepare('SELECT * FROM comments');
+        $getAll = $this->db->prepare('SELECT * FROM comments LIMIT :limit');
+        $getAll->bindParam(':limit', $limit, \PDO::PARAM_INT);
         $getAll->execute();
         return $getAll->fetchAll();
     }

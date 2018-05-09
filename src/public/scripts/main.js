@@ -59,7 +59,7 @@ function getAllEntries(){
           commentButton.setAttribute("id", "addComment");
           commentButton.innerHTML ="Make a comment";
           /*commentButton.addEventListener("click", postComment());*/
-        commentButton.setAttribute( "onClick", "postComment();");
+          commentButton.setAttribute( "onClick", "postComment();");
            /*commentButton.onclick = function(){postComment();}*/
           //Add Eventlistner..".// res.data[i].entryID*/
           article.appendChild(commentButton);
@@ -131,7 +131,7 @@ function postUser(){
     credentials: 'include'
   }
 
-  fetch('api/users', postOptions)
+  fetch('/register', postOptions)
     .then(res => res.json())
     .then(console.log);
 }
@@ -142,7 +142,7 @@ function postComment(){
   const comment = document.getElementById('commentsInput');// from texarea.
   formData.append('comment', comment.value);
 
-  for( let [key,value] of formData.entries()) { console.log(key,value);}
+  for(let [key,value] of formData.entries()) { console.log(key,value);}
   const postOptions = {
     method: 'POST',
     body: formData,
@@ -159,12 +159,14 @@ function postComment(){
 
 function login(){
   const formData = new FormData();
-  formData.append('username', 'goran');
-  formData.append('password', 'bunneltan');
+  const username = document.getElementById('loginUserInput');
+  const password = document.getElementById('loginPassInput');
+  formData.append('username', username.value);
+  formData.append('password', password.value);
+
   const postOptions = {
     method: 'POST',
     body: formData,
-    // DON'T FORGET
     credentials: 'include'
   }
 
@@ -173,17 +175,33 @@ function login(){
     .then(console.log);
 }
 
-/*const form = document.getElementById('newEntry');
+function logout(){
+
+  fetch('/logout')
+    .then(res => res.json())
+    .then(console.log);
+}
+
+const form = document.getElementById('login');
 form.addEventListener('submit', function (e) {
   e.preventDefault();
   const formData = new FormData(this);
-});*/
+});
+
+const form2 = document.getElementById('newUser');
+form2.addEventListener('submit', function (e) {
+  e.preventDefault();
+  const formData = new FormData(this);
+});
 
 const addEntryButton = document.getElementById('addEntry');
 addEntryButton.addEventListener('click', postEntry);
 
 const addUserButton = document.getElementById('addUser');
 addUserButton.addEventListener('click', postUser);
+
+const loginButton = document.getElementById("loginBtn");
+loginButton.addEventListener('click', login);
 /*
 const addCommentButton = document.getElementById('addComment');
 addCommentButton.addEventListener('click', postComment);*/

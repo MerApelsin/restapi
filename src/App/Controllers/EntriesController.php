@@ -20,11 +20,35 @@ class EntriesController
         $this->db = $pdo;
     }
 
-    public function getAll(/*$limit*/)
+    public function getAll($limit)
     {
-        $getAll = $this->db->prepare('SELECT * FROM entries /*LIMIT :limit*/');
-        $getAll->execute(/*[':limit' => $limit]*/);
+            $argss = func_num_args();// array of parameters. Super Cecilia! <3
+
+        if ($argss > 0){ // Any args?
+            $limit = func_get_arg(0); // get arg - limit
+            $getAllEntries= $this->db->prepare("SELECT * FROM users LIMIT :limit");
+            $getAllEntries->bindParam(':limit', $limit, \PDO::PARAM_INT);
+            $getAllEntries->execute();
+            $allEntries = $getAllEntries->fetchAll();
+            return $allEntries; 
+        }
+        else if ($argss == 2){
+                if(isset(func_get_arg(1))){
+            $title = func_get_arg(1); // get arg - title
+            $getAllEntries = $this->db->prepare("SELECT * FROM entries WHERE title LIKE :title");
+            $getAllEntries->bindParam(':title', '%'.$title.'%');
+            $getAllEntries->execute();
+            $allEntries = $getAllEntries->fetchAll();
+            return $allEntries; 
+            }
+        }
+        else
+        {   //if no args get all.
+        $getAll = $this->db->prepare('SELECT * FROM entries LIMIT :limit');
+        $getAll->bindParam(':limit', $limit, \PDO::PARAM_INT);
+        $getAll->execute();
         return $getAll->fetchAll();
+        }
     }
 
     public function getOne($id)
