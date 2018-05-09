@@ -26,7 +26,7 @@ class EntriesController
             //die(var_dump($argss));
         if (func_get_arg(1) == null){ // Any args?
             $limit = func_get_arg(0); // get arg - limit
-            $getAllEntries= $this->db->prepare("SELECT * FROM users LIMIT :limit");
+            $getAllEntries= $this->db->prepare("SELECT * FROM entries LIMIT :limit");
             $getAllEntries->bindParam(':limit', $limit, \PDO::PARAM_INT);
             $getAllEntries->execute();
             $allEntries = $getAllEntries->fetchAll();

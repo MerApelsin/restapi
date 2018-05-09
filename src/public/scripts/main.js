@@ -1,13 +1,17 @@
 function main(){
-  fetch('api/entries')
+  fetch('api/entries',/*{
+    credentials: 'include'
+  }*/)
     .then(res => res.json())
     .then(console.log);
 }
 
 function getAllUsers(){
-  fetch('api/users')
+  fetch('api/users',{
+    credentials: 'include'
+  })
     .then(res => res.json())
-        .then(res => {  
+        .then(res => {
    for (let i = 0; i < res.length; i++)
         {
          /* document.body.append(res.data[i].content);*/
@@ -26,10 +30,12 @@ function getAllUsers(){
 
 
 function getAllEntries(){
-  fetch('api/entries')
+  fetch('api/entries',{
+    credentials: 'include'
+  } )
   .then(res => res.json())
   .then(res => {
-      
+
       for (let i = 0; i < res.data.length; i++)
         {
           const article = document.createElement("post-wrapper");
@@ -41,9 +47,9 @@ function getAllEntries(){
           tag1.appendChild(textNode1);
           article.appendChild(tag1);
           document.getElementById("getPosts-wrapper").appendChild(article);
-          
+
           const content = document.createElement("p");
-          const text2 = res.data[i].content; 
+          const text2 = res.data[i].content;
           const textNode2 = document.createTextNode(text2);
           content.appendChild(textNode2);
           article.appendChild(content);
@@ -177,7 +183,9 @@ function login(){
 
 function logout(){
 
-  fetch('/logout')
+  fetch('/logout', {
+    credentials: 'include'
+  })
     .then(res => res.json())
     .then(console.log);
 }

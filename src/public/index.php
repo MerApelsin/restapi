@@ -209,6 +209,6 @@ $app->group('/api', function () use ($app) {
         $singleEntry = $this->comments->deleteOne($id);
         return $response->withJson(['data' => $singleEntry]);
     });
-});/*->add($auth);*/
+})->add($auth);
 
 $app->run();
