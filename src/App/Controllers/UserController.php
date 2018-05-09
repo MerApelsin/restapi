@@ -5,7 +5,7 @@ namespace App\Controllers;
 class UserController
 {
     private $db;
-    
+
     public function __construct($pdo)
     {
         $this->db = $pdo;
@@ -21,7 +21,7 @@ class UserController
             $getAllUsers->bindParam(':limit', $limit, \PDO::PARAM_INT);
             $getAllUsers->execute();
             $allUsers = $getAllUsers->fetchAll();
-            return $allUsers; 
+            return $allUsers;
         }
         else
         {
@@ -49,7 +49,7 @@ class UserController
         $newDate= date("Y-m-d H:i:s", strtotime('+2 hours'));
 
         $addOne = $this->db->prepare(
-            'INSERT INTO users (username, password, createdAt) 
+            'INSERT INTO users (username, password, createdAt)
              VALUES (:username, :password, :createdAt)'
         );
         $addOne->execute([
@@ -63,7 +63,7 @@ class UserController
           'username' => $user['username'],
           'password' => $user['password'],
           'createdAt' => $newDate['createdAt']
-        
+
           ];
 
     }

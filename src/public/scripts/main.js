@@ -1,7 +1,7 @@
 function main(){
-  fetch('api/entries',/*{
+  fetch('api/entries',{
     credentials: 'include'
-  }*/)
+  })
     .then(res => res.json())
     .then(console.log);
 }
