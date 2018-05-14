@@ -114,7 +114,7 @@ function getAllEntries(){
           commentButton.innerHTML ="Make a comment";
           /*commentButton.addEventListener("click", postComment());*/
           commentButton.setAttribute( "onClick", "postComment();");
-           /*commentButton.onclick = function(){postComment();}*/
+          commentButton.onclick = function(){postComment(id);}
           //Add Eventlistner..".// res.data[i].entryID*/
           article.appendChild(commentButton);
         }
@@ -222,11 +222,13 @@ function postUser(){
     .then(console.log);
 }
 
-function postComment(){
+function postComment(userID, entryID){
   // x-www-form-urlencoded
   const formData = new FormData();
-  const comment = document.getElementById('commentsInput');// from texarea.
+  const comment = document.getElementById('commentsInput');// from texarea behöver unika idn.
   formData.append('comment', comment.value);
+  formData.append('entryID', entryID);
+  formData.append('createdBy', userID);
 
   for(let [key,value] of formData.entries()) { console.log(key,value);}
   const postOptions = {
