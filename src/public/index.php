@@ -66,6 +66,10 @@ $app->post('/login', function ($request, $response, $args) {
     if (password_verify($body['password'], $user['password'])) {
         $_SESSION['loggedIn'] = true;
         $_SESSION['userID'] = $user['userID'];
+        $cookie_name = 'userID';
+        $cookie_value = $_SESSION['userID'];
+        setcookie($cookie_name, $cookie_value, time() + (86400 * 30), '/'); // 86400 = 1 day
+      
         if(isset($_SESSION['loggedIn'])){
         /*    return $response->withJson('logged in is set');*/
         }
@@ -82,6 +86,10 @@ $app->get('/logout', function ($request, $response, $args) {
     // No request data is being sent
     if($_SESSION['loggedIn'] == true){
     session_destroy();
+    $cookie_name = 'userID';
+    unset($_COOKIE[$cookie_name]);
+// empty value and expiration one hour before
+$res = setcookie($cookie_name, '', time() - 3600);
     return $response->withJson('Success');
     }
     else{
@@ -147,6 +155,23 @@ $app->group('/api', function () use ($app) {
         return $response->withJson(['data' => $singleEntry]);
     });
 
+        $app->get('/entries/{id}/comments', function ($request, $response, $args) {
+
+            $query = $request->getQueryParams();
+
+            if (isset($query['limit'])){
+
+            $limit = $query['limit'];
+            $entryComments = $this->entries->getEntryComments($args['id'], $limit);
+            return $response->withJson($entryComments);
+        }
+        else 
+        {
+            $entryComments = $this->entries->getEntryComments($args['id']);
+            return $response->withJson($entryComments);
+        }
+    });
+
 
     // POST http://localhost:XXXX/api/todos
     $app->post('/entries', function ($request, $response, $args) {
@@ -184,6 +209,7 @@ $app->group('/api', function () use ($app) {
    $app->get('/users/{id}/posts', function ($request, $response, $args) {
       /*  $userPosts = $this->users->getUserPosts($args['id']);
         return $response->withJson($userPosts);*/
+        $query = $request->getQueryParams();
 
             if (isset($query['limit'])){
 
@@ -226,6 +252,6 @@ $app->group('/api', function () use ($app) {
         $singleEntry = $this->comments->deleteOne($id);
         return $response->withJson(['data' => $singleEntry]);
     });
-});/*->add($auth);*/
+})->add($auth);
 
 $app->run();

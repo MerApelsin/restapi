@@ -65,6 +65,7 @@
     <div class="button-wrapper">
 <button onclick="getAllEntries()" id="getEntries">Get all Entries</button>
 <button onclick="getAllUsers()" id="getUsers">Get All Users</button>
+<button onclick="getAllComments()" id="getComments">Get All Comments</button>
 </div>
 </div><!--End of getIt-->
 <div class = "article-wrapper">

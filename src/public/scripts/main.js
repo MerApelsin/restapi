@@ -1,3 +1,19 @@
+/*function getCookie(cname) {
+    const name = cname + "=";
+    const decodedCookie = decodeURIComponent(document.cookie);
+    const ca = decodedCookie.split(';');
+    for(let i = 0; i <ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return "";
+}*/
+
 function main(){
   fetch('api/entries',{
     credentials: 'include'
@@ -40,6 +56,13 @@ function getAllEntries(){
         {
           const article = document.createElement("post-wrapper");
           article.setAttribute("class", "post-wrapper");
+          const tag= document.createElement("h4");
+          const id = res.data[i].entryID;
+          const textNode = document.createTextNode(id);
+          tag.appendChild(textNode);
+          article.appendChild(tag);
+
+          document.getElementById("getPosts-wrapper").appendChild(article);
           const tag1 = document.createElement("h4");
           /*tag1.setAttribute("class", "post-wrapper");*/
           const text1 = res.data[i].title;
@@ -55,6 +78,31 @@ function getAllEntries(){
           article.appendChild(content);
           document.getElementById("getPosts-wrapper").appendChild(article);
 
+          const btnWrapper = document.createElement("btn-wrapper");
+          btnWrapper.setAttribute("class","btn-wrapper");
+          const updateBtn = document.createElement("input");
+          updateBtn.setAttribute("type", "button");
+          updateBtn.setAttribute("value", "Update");
+          updateBtn.setAttribute("class", "btn");
+
+          btnWrapper.appendChild(updateBtn);
+
+          const deleteBtn = document.createElement("input");
+          deleteBtn.setAttribute("type", "button");
+          deleteBtn.setAttribute("value", "delete");
+          deleteBtn.setAttribute("class", "btn");
+          deleteBtn.onclick = function() {deleteEntries(id);}
+          btnWrapper.appendChild(deleteBtn);
+  
+
+          const commentBtn = document.createElement("input");
+          commentBtn.setAttribute("type", "button");
+          commentBtn.setAttribute("value", "comment");
+          commentBtn.setAttribute("class", "btn");
+          btnWrapper.appendChild(commentBtn);
+
+          article.appendChild(btnWrapper);
+
           const commentsInput = document.createElement("textarea");
           commentsInput.setAttribute("class", "textarea");
           commentsInput.setAttribute("id", "commentsInput");
@@ -69,31 +117,53 @@ function getAllEntries(){
            /*commentButton.onclick = function(){postComment();}*/
           //Add Eventlistner..".// res.data[i].entryID*/
           article.appendChild(commentButton);
+        }
+    });
+}
 
-          const btnWrapper = document.createElement("btn-wrapper");
-          btnWrapper.setAttribute("class","btn-wrapper");
-          const updateBtn = document.createElement("input");
-          updateBtn.setAttribute("type", "button");
-          updateBtn.setAttribute("value", "Update");
-          updateBtn.setAttribute("class", "btn");
+function getAllComments(){
+  fetch('api/comments',{
+    credentials: 'include'
+  })
+    .then(res => res.json())
+        .then(res => {
+   for (let i = 0; i < res.length; i++)
+        {
+          const article = document.createElement("post-wrapper");
+          article.setAttribute("class", "post-wrapper");
+          const tag= document.createElement("h4");
+          const id = res[i].commentID;
+          const textNode = document.createTextNode(id);
+          tag.appendChild(textNode);
+          article.appendChild(tag);
 
-          btnWrapper.appendChild(updateBtn);
+          const tag1 = document.createElement("p");
+          /*tag1.setAttribute("class", "post-wrapper");*/
+          const text1 = res[i].content;
+          const textNode1 = document.createTextNode(text1);
+          tag1.appendChild(textNode1);
+          article.appendChild(tag1);
+          document.getElementById("getPosts-wrapper").appendChild(article);
 
           const deleteBtn = document.createElement("input");
           deleteBtn.setAttribute("type", "button");
           deleteBtn.setAttribute("value", "delete");
           deleteBtn.setAttribute("class", "btn");
-          btnWrapper.appendChild(deleteBtn);
-
-          const commentBtn = document.createElement("input");
-          commentBtn.setAttribute("type", "button");
-          commentBtn.setAttribute("value", "comment");
-          commentBtn.setAttribute("class", "btn");
-          btnWrapper.appendChild(commentBtn);
-
-          article.appendChild(btnWrapper);
+          deleteBtn.onclick = function() {deleteComment(id);}
+          article.appendChild(deleteBtn);
         }
     });
+}
+
+function deleteComment(id){
+  const url = 'api/comments/' + id;
+  
+  fetch(url, {
+    method: 'DELETE',
+    credentials: 'include'
+  })
+    .then(res => res.json())
+    .then(console.log);
 }
 
 function postEntry(){
@@ -101,9 +171,10 @@ function postEntry(){
   const formData = new FormData();
   const entryTitle = document.getElementById('entryTitleInput');
   const entryContent = document.getElementById('entryContentInput');
+ /* const id = getCookie(userID);*/
   formData.append('title', entryTitle.value);
   formData.append('content', entryContent.value);
-  formData.append('createdBy', 1);
+  formData.append('createdBy', 1/*id*/ );
 
   //for( let [key,value] of formData.entries()) { console.log(key,value);}
   const postOptions = {
@@ -114,13 +185,22 @@ function postEntry(){
   }
 
   fetch('api/entries', postOptions)
+
     .then(res => res.json())
-    .then((newEntry) => {
-        document.body.insertAdjacentHTML('beforeend', newEntry.data.content);
-        console.log(res);
-        window.stop();
-    });
+    .then(console.log);
 }
+
+function deleteEntries(id){
+  const url = 'api/entries/' + id;
+  
+  fetch(url, {
+    method: 'DELETE',
+    credentials: 'include'
+  })
+    .then(res => res.json())
+    .then(console.log);
+}
+
 function postUser(){
   // x-www-form-urlencoded
   const formData = new FormData();

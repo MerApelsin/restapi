@@ -52,6 +52,33 @@ class EntriesController
         }
     }
 
+    public function getEntryComments($id)
+    {
+        $argss = func_num_args();// array of parameters.
+
+        if ((func_get_arg(1) != null)){
+            $limit = func_get_arg(1);
+            //die(var_dump($argss));
+            $getEntryComments = $this->db->prepare("SELECT * FROM comments WHERE entryID = :id LIMIT :limit");
+            $getEntryComments->bindParam(':id', $id);
+            $getEntryComments->bindParam(':limit', $limit, \PDO::PARAM_INT);
+            $getEntryComments->execute();
+            $entryComments = $getEntryComments->fetchAll();
+            return $entryComments;
+        }
+
+        else{
+
+            $getEntryComments = $this->db->prepare("SELECT * FROM comments WHERE entryID = :id");
+            $getEntryComments->execute([
+            ":id" => $id
+        ]);
+            // Fetch -> single resource
+            $entryComments = $getEntryComments->fetchAll();
+            return $entryComments;
+        }
+    }
+
     public function getOne($id)
     {
         $getOne = $this->db->prepare('SELECT * FROM entries WHERE entryID = :id');

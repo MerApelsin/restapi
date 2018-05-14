@@ -44,13 +44,29 @@ class UserController
     }
         public function getUserPosts($id)
     {
-        $getUserPosts = $this->db->prepare("SELECT * FROM entries WHERE createdBy = :id ");
-        $getUserPosts->execute([
-          ":id" => $id
+        $argss = func_num_args();// array of parameters.
+
+        if ((func_get_arg(1) != null)){
+            $limit = func_get_arg(1);
+            //die(var_dump($argss));
+            $getUserPosts = $this->db->prepare("SELECT * FROM entries WHERE createdBy = :id LIMIT :limit");
+            $getUserPosts->bindParam(':id', $id);
+            $getUserPosts->bindParam(':limit', $limit, \PDO::PARAM_INT);
+            $getUserPosts->execute();
+            $userPosts = $getUserPosts->fetchAll();
+            return $userPosts;
+        }
+
+        else{
+
+            $getUserPosts = $this->db->prepare("SELECT * FROM entries WHERE createdBy = :id ");
+            $getUserPosts->execute([
+            ":id" => $id
         ]);
-        // Fetch -> single resource
-        $userPosts = $getUserPosts->fetchAll();
-        return $userPosts;
+            // Fetch -> single resource
+            $userPosts = $getUserPosts->fetchAll();
+            return $userPosts;
+        }
     }
 
       public function add($user)
