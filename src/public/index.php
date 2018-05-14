@@ -111,8 +111,9 @@ $app->group('/api', function () use ($app) {
             $limit = $query['limit'];
         }
         else{
-             $limit= 20;
+             $limit= 20; 
         }
+
 
         if (isset($query['title'])){
             $title = $query['title'];
@@ -168,7 +169,7 @@ $app->group('/api', function () use ($app) {
             $allUsers = $this->users->getAll($limit);
             return $response->withJson($allUsers);
         }
-        else
+        else 
         {
             $allUsers = $this->users->getAll();
             return $response->withJson($allUsers);
@@ -180,6 +181,22 @@ $app->group('/api', function () use ($app) {
         return $response->withJson($allUsers);
     });
 
+   $app->get('/users/{id}/posts', function ($request, $response, $args) {
+      /*  $userPosts = $this->users->getUserPosts($args['id']);
+        return $response->withJson($userPosts);*/
+
+            if (isset($query['limit'])){
+
+            $limit = $query['limit'];
+            $userPosts = $this->users->getUserPosts($args['id'], $limit);
+            return $response->withJson($userPosts);
+        }
+        else 
+        {
+            $userPosts = $this->users->getUserPosts($args['id']);
+            return $response->withJson($userPosts);
+        }
+    });
     //Comments
         $app->get('/comments', function ($request, $response, $args) {
         $query = $request->getQueryParams();
@@ -188,7 +205,7 @@ $app->group('/api', function () use ($app) {
             $limit = $query['limit'];
         }
         else{
-             $limit= 20;
+             $limit= 20; 
         }
 
         $allComments = $this->comments->getAll($limit);
@@ -209,6 +226,6 @@ $app->group('/api', function () use ($app) {
         $singleEntry = $this->comments->deleteOne($id);
         return $response->withJson(['data' => $singleEntry]);
     });
-})->add($auth);
+});/*->add($auth);*/
 
 $app->run();

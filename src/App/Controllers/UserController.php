@@ -42,6 +42,16 @@ class UserController
         $oneUser = $getOneUser->fetch();
         return $oneUser;
     }
+        public function getUserPosts($id)
+    {
+        $getUserPosts = $this->db->prepare("SELECT * FROM entries WHERE createdBy = :id ");
+        $getUserPosts->execute([
+          ":id" => $id
+        ]);
+        // Fetch -> single resource
+        $userPosts = $getUserPosts->fetchAll();
+        return $userPosts;
+    }
 
       public function add($user)
     {
