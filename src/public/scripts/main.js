@@ -171,10 +171,10 @@ function postEntry(){
   const formData = new FormData();
   const entryTitle = document.getElementById('entryTitleInput');
   const entryContent = document.getElementById('entryContentInput');
- /* const id = getCookie(userID);*/
+  const id = document.getElementById('hiddenField').value;
   formData.append('title', entryTitle.value);
   formData.append('content', entryContent.value);
-  formData.append('createdBy', 1/*id*/ );
+  formData.append('createdBy', id );
 
   //for( let [key,value] of formData.entries()) { console.log(key,value);}
   const postOptions = {

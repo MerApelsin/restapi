@@ -12,6 +12,8 @@
 <body>
   <h1>cms</h1>
 
+  <input type="hidden" name ="userID" id ="hiddenField" value= "<?php echo $_SESSION['userID']?>"/>
+
   <div class = "form-wrapper">
       <div class = "register">
         <h2>Register</h2>
