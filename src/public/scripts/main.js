@@ -119,6 +119,7 @@ function getAllEntries(){
   .then(res => res.json())
   .then(res => createArticle(res));
 }
+
 function getComments(entryId){
   const url = 'api/entries/'+entryId+'/comments';
   fetch(url ,{
