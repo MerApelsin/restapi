@@ -1,18 +1,4 @@
-/*function getCookie(cname) {
-    const name = cname + "=";
-    const decodedCookie = decodeURIComponent(document.cookie);
-    const ca = decodedCookie.split(';');
-    for(let i = 0; i <ca.length; i++) {
-        let c = ca[i];
-        while (c.charAt(0) == ' ') {
-            c = c.substring(1);
-        }
-        if (c.indexOf(name) == 0) {
-            return c.substring(name.length, c.length);
-        }
-    }
-    return "";
-}*/
+document.getElementById("update").style.display="none";
 
 function main(){
   fetch('api/entries',{
@@ -22,6 +8,19 @@ function main(){
     .then(console.log);
 }
 
+function search(){
+  const searchTerm = document.getElementById("search").value;
+  const url = 'api/entries?title=' + searchTerm;
+
+  if ( searchTerm.length >0){
+
+  fetch(url, {
+    credentials:'include'
+  })
+  .then(res => res.json())
+  .then(res => createArticle(res));
+ }
+}
 function getAllUsers(){
   fetch('api/users',{
     credentials: 'include'
@@ -44,23 +43,14 @@ function getAllUsers(){
     });
 }
 
+function createArticle(res){
 
-function getAllEntries(){
-  fetch('api/entries',{
-    credentials: 'include'
-  } )
-  .then(res => res.json())
-  .then(res => {
-
-      for (let i = 0; i < res.data.length; i++)
+   for (let i = 0; i < res.data.length; i++)
         {
           const article = document.createElement("post-wrapper");
           article.setAttribute("class", "post-wrapper");
-          const tag= document.createElement("h4");
-          const id = res.data[i].entryID;
-          const textNode = document.createTextNode(id);
-          tag.appendChild(textNode);
-          article.appendChild(tag);
+          const entryId = res.data[i].entryID;
+          article.setAttribute("id", entryId);
 
           document.getElementById("getPosts-wrapper").appendChild(article);
           const tag1 = document.createElement("h4");
@@ -84,6 +74,7 @@ function getAllEntries(){
           updateBtn.setAttribute("type", "button");
           updateBtn.setAttribute("value", "Update");
           updateBtn.setAttribute("class", "btn");
+          updateBtn.onclick = function() {getUpdate(entryId);}
 
           btnWrapper.appendChild(updateBtn);
 
@@ -91,7 +82,7 @@ function getAllEntries(){
           deleteBtn.setAttribute("type", "button");
           deleteBtn.setAttribute("value", "delete");
           deleteBtn.setAttribute("class", "btn");
-          deleteBtn.onclick = function() {deleteEntries(id);}
+          deleteBtn.onclick = function() {deleteEntries(entryId);}
           btnWrapper.appendChild(deleteBtn);
   
 
@@ -99,13 +90,13 @@ function getAllEntries(){
           commentBtn.setAttribute("type", "button");
           commentBtn.setAttribute("value", "comment");
           commentBtn.setAttribute("class", "btn");
+          commentBtn.onclick = function() {getComments(entryId);}
           btnWrapper.appendChild(commentBtn);
 
           article.appendChild(btnWrapper);
 
           const commentsInput = document.createElement("textarea");
           commentsInput.setAttribute("class", "textarea");
-          commentsInput.setAttribute("id", "commentsInput");
           article.appendChild(commentsInput);
 
           const commentButton = document.createElement("input");
@@ -114,11 +105,34 @@ function getAllEntries(){
           commentButton.innerHTML ="Make a comment";
           /*commentButton.addEventListener("click", postComment());*/
           commentButton.setAttribute( "onClick", "postComment();");
-          commentButton.onclick = function(){postComment(id);}
+          commentButton.onclick = function(){ getTextValue(entryId);}
           //Add Eventlistner..".// res.data[i].entryID*/
           article.appendChild(commentButton);
+
         }
-    });
+}
+
+function getAllEntries(){
+  fetch('api/entries',{
+    credentials: 'include'
+  } )
+  .then(res => res.json())
+  .then(res => createArticle(res));
+}
+function getComments(entryId){
+  const url = 'api/entries/'+entryId+'/comments';
+  fetch(url ,{
+    credentials: 'include'
+  } )
+  .then(res => res.json())
+  .then(res => createComments(res));
+}
+
+function getTextValue(id){
+  const getTextValue = document.getElementById(id).getElementsByTagName("textarea")[0];
+  const userID = document.getElementById("hiddenField").value;
+  const textValue = getTextValue.value;
+  postComment(id, textValue, userID);
 }
 
 function getAllComments(){
@@ -126,8 +140,11 @@ function getAllComments(){
     credentials: 'include'
   })
     .then(res => res.json())
-        .then(res => {
-   for (let i = 0; i < res.length; i++)
+        .then(res => {createComments(res)});
+}
+function createComments(res){
+
+    for (let i = 0; i < res.length; i++)
         {
           const article = document.createElement("post-wrapper");
           article.setAttribute("class", "post-wrapper");
@@ -152,8 +169,8 @@ function getAllComments(){
           deleteBtn.onclick = function() {deleteComment(id);}
           article.appendChild(deleteBtn);
         }
-    });
-}
+    }; 
+
 
 function deleteComment(id){
   const url = 'api/comments/' + id;
@@ -190,6 +207,47 @@ function postEntry(){
     .then(console.log);
 }
 
+function getUpdate(id){
+  const title = document.getElementById("entryTitleInput");
+  const content = document.getElementById("entryContentInput");
+  const hiddenId = document.getElementById("updateId");
+  document.getElementById("addEntry").style.display="none";
+  document.getElementById("update").style.display="block";
+
+  const url ='api/entries/' + id;
+
+  fetch(url, {
+    credentials: 'include'
+  }) 
+  .then(res => res.json())
+  .then(res => {
+
+    title.value = res.data.title;
+    content.value = res.data.content;
+    hiddenId.value = id;
+    self.location = "#makePost";
+  });
+}
+
+function updateEntry(){
+  const entryId = document.getElementById("updateId").value;
+  const updateTitle = document.getElementById("entryTitleInput").value;
+  const updateContent = document.getElementById("entryContentInput").value;
+  const url = 'api/entries/' + entryId;
+  const string = 'title='+ updateTitle + '&content='+ updateContent;
+
+  fetch( url ,{
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: JSON.stringify(string),
+    credentials: 'include'
+ });
+
+   document.getElementById("addEntry").style.display="block";
+   document.getElementById("update").style.display="none";
+   self.location = '/';
+}
+
 function deleteEntries(id){
   const url = 'api/entries/' + id;
   
@@ -222,19 +280,17 @@ function postUser(){
     .then(console.log);
 }
 
-function postComment(userID, entryID){
+function postComment(id, textValue, userID){
   // x-www-form-urlencoded
   const formData = new FormData();
-  const comment = document.getElementById('commentsInput');// from texarea behöver unika idn.
-  formData.append('comment', comment.value);
-  formData.append('entryID', entryID);
+  formData.append('entryID', id);
+  formData.append('content', textValue);
   formData.append('createdBy', userID);
 
   for(let [key,value] of formData.entries()) { console.log(key,value);}
   const postOptions = {
     method: 'POST',
     body: formData,
-    // MUCH IMPORTANCE!
     credentials: 'include'
   }
 
@@ -292,6 +348,9 @@ addUserButton.addEventListener('click', postUser);
 
 const loginButton = document.getElementById("loginBtn");
 loginButton.addEventListener('click', login);
-/*
-const addCommentButton = document.getElementById('addComment');
-addCommentButton.addEventListener('click', postComment);*/
+
+const searchButton = document.getElementById('searchBtn');
+searchButton.addEventListener('click', search);
+
+const updateButton = document.getElementById('update');
+updateButton.addEventListener('click', updateEntry);

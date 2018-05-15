@@ -41,7 +41,7 @@ class CommentsController
             'INSERT INTO comments (entryID, content, createdBy, createdAt) VALUES (:entryID, :content, :createdBy, :createdAt)'
         );
 
-        $addOne->execute([':entryID' => 1, 
+        $addOne->execute([':entryID' => $comments['entryID'], 
            ':content'  => $comments['content'],
           ':createdBy' => $comments['createdBy'],
           ':createdAt' => $newDate

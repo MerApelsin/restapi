@@ -93,6 +93,12 @@ class EntriesController
       /*  return $deleteOne->fetch();*/
     }
 
+    public function update($id,$body)
+    {
+      $updateOne = $this->db->prepare('UPDATE entries SET title = :title, content = :content WHERE entryID = :entryID');
+      $updateOne->execute([ ':title' => $body['title'], ':content' => $body['content'], ':entryID' => $id]);
+    }
+
     public function add($entry)
     {
         /**

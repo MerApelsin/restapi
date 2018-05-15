@@ -10,11 +10,21 @@
 </head>
 
 <body>
+  <div class= "logout">
+  <button onclick="logout()">Logout</button>
+  </div>
+
+<div class ="searchField">
+  <input type ="text" id="search" placeholder="Search title"/>
+  <button id ="searchBtn"><img src = "../magnifying-glass.png"></button>
+  </div>
+  <p>
+
   <h1>cms</h1>
 
   <input type="hidden" name ="userID" id ="hiddenField" value= "<?php echo $_SESSION['userID']?>"/>
 
-  <div class = "form-wrapper">
+  <div class = "login-wrapper">
       <div class = "register">
         <h2>Register</h2>
            <form action="" id="newUser">
@@ -38,23 +48,20 @@
       </div><!--End of Sign in-->
 </div><!--form-wrapper-->
 
-      <button onclick="logout()">Logout</button>
 
   
      </div><!--end of post-newEntry-->
   </div><!--End of formwrapper-->
-  <!-- <input type="text" id="entryTitleInput">
-  <input type="text" id="entryContentInput">
-  <button id="addEntry">Add Entry</button> -->
-  <div class = "form-wrapper">
+
+  <div class = "form-wrapper" id ="makePost">
      <div class = "post-newEntry">
       <h2>Make a Post</h2>
         <form action="" id="newEntry">
           <input type="text" id="entryTitleInput" placeholder="Title">
           <input type="text" id="entryContentInput" placeholder="Content..">
-    <!--<button id="addEntry">Add Entry</button> -->
-    <!-- <input type="text" name="content">
-       --><input type="submit" id="addEntry">
+          <input type="hidden" id ="updateId" value="">
+          <input type="submit" value="Send" id="addEntry">
+          <input type="submit" value="Update" id="update">
         </form>
      </div><!--end of post-newEntry-->
   </div><!--End of formwrapper-->

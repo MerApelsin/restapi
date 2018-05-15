@@ -148,6 +148,14 @@ $app->group('/api', function () use ($app) {
         $singleEntry = $this->entries->getOne($id);
         return $response->withJson(['data' => $singleEntry]);
     });
+
+       $app->patch('/entries/{id}', function ($request, $response, $args){
+        
+        $id = $args['id'];
+        $body = $request->getParsedBody();
+        $newEntry = $this->entries->update($id, $body);
+        return $response->withJson(['data' => $newEntry]);
+    });
         $app->delete('/entries/{id}', function ($request, $response, $args) {
 
         $id = $args['id'];
@@ -184,6 +192,7 @@ $app->group('/api', function () use ($app) {
         $newEntry = $this->entries->add($body);
         return $response->withJson(['data' => $newEntry]);
     });
+
     // Users
 
     $app->get('/users', function ($request, $response, $args) {
