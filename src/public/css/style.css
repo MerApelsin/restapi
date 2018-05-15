@@ -63,7 +63,7 @@ p
 .logout button
 {
   width: 10em;
-  margin-right: 12em;
+  margin:2em;
 }
 .searchField
 {
@@ -238,3 +238,17 @@ input[type="text"]::-webkit-input-placeholder
      font-family: "Plantin Light", sans-serif;
      color:gray;
 }
+
+@media only screen and (max-width: 767px) {
+ .login-wrapper
+ {
+    display: flex;
+    flex-direction: column;
+
+}
+.signin, .register, .post-newEntry
+{
+  width: 100%;
+}
+}
+
