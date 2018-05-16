@@ -18,6 +18,8 @@
   <input type ="text" id="search" placeholder="Search title"/>
   <button id ="searchBtn"><img src = "../magnifying-glass.png"></button>
   </div>
+  <div id="searchResult">
+  </div>
   <p>
 
   <h1>cms</h1>
@@ -79,6 +81,9 @@
 </div><!--End of getIt-->
 <div class = "article-wrapper">
 <div class = "getPosts-wrapper" id ="getPosts-wrapper">
+<div id = "renderEntries"></div>
+<div id = "renderComments"></div>
+<div id = "renderUsers"></div>
 </div>
 
 
