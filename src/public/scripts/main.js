@@ -84,7 +84,7 @@ function createArticle(res){
           deleteBtn.setAttribute("class", "btn");
           deleteBtn.onclick = function() {deleteEntries(entryId);}
           btnWrapper.appendChild(deleteBtn);
-  
+
 
           const commentBtn = document.createElement("input");
           commentBtn.setAttribute("type", "button");
@@ -170,12 +170,12 @@ function createComments(res){
           deleteBtn.onclick = function() {deleteComment(id);}
           article.appendChild(deleteBtn);
         }
-    }; 
+    };
 
 
 function deleteComment(id){
   const url = 'api/comments/' + id;
-  
+
   fetch(url, {
     method: 'DELETE',
     credentials: 'include'
@@ -219,7 +219,7 @@ function getUpdate(id){
 
   fetch(url, {
     credentials: 'include'
-  }) 
+  })
   .then(res => res.json())
   .then(res => {
 
@@ -240,7 +240,7 @@ function updateEntry(){
   fetch( url ,{
     method: 'PATCH',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: JSON.stringify(string),
+    body: string,
     credentials: 'include'
  });
 
@@ -251,7 +251,7 @@ function updateEntry(){
 
 function deleteEntries(id){
   const url = 'api/entries/' + id;
-  
+
   fetch(url, {
     method: 'DELETE',
     credentials: 'include'
