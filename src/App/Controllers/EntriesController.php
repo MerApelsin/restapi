@@ -23,8 +23,9 @@ class EntriesController
     public function getAll($limit)
     {
             $argss = func_num_args();// array of parameters. Super Cecilia! <3
-            //die(var_dump($argss));
-        if (func_get_arg(1) == null){ // Any args?
+
+        if (func_get_arg(1) == null)
+        { // Any args?
             $limit = func_get_arg(0); // get arg - limit
             $getAllEntries= $this->db->prepare("SELECT * FROM entries LIMIT :limit");
             $getAllEntries->bindParam(':limit', $limit, \PDO::PARAM_INT);
@@ -33,18 +34,16 @@ class EntriesController
             return $allEntries;
         }
 
-          else if((func_get_arg(1) != null)){
+        else if((func_get_arg(1) != null))
+        {
             $title = func_get_arg(1); // get arg - title
             $getAllEntries = $this->db->prepare("SELECT * FROM entries WHERE title LIKE :title");
-            //$getAllEntries->bindParam(':title', '%'.$title.'%');
             $getAllEntries->execute([':title' => '%'.$title.'%']);
             $allEntries = $getAllEntries->fetchAll();
             return $allEntries;
-
         }
         else
         {   //if no args get all.
-
           $getAll = $this->db->prepare('SELECT * FROM entries LIMIT :limit');
           $getAll->bindParam(':limit', $limit, \PDO::PARAM_INT);
           $getAll->execute();
@@ -56,9 +55,9 @@ class EntriesController
     {
         $argss = func_num_args();// array of parameters.
 
-        if ((func_get_arg(1) != null)){
+        if ((func_get_arg(1) != null))
+        {
             $limit = func_get_arg(1);
-            //die(var_dump($argss));
             $getEntryComments = $this->db->prepare("SELECT * FROM comments WHERE entryID = :id LIMIT :limit");
             $getEntryComments->bindParam(':id', $id);
             $getEntryComments->bindParam(':limit', $limit, \PDO::PARAM_INT);
@@ -66,14 +65,10 @@ class EntriesController
             $entryComments = $getEntryComments->fetchAll();
             return $entryComments;
         }
-
-        else{
-
+        else
+        {
             $getEntryComments = $this->db->prepare("SELECT * FROM comments WHERE entryID = :id");
-            $getEntryComments->execute([
-            ":id" => $id
-        ]);
-            // Fetch -> single resource
+            $getEntryComments->execute([":id" => $id]);
             $entryComments = $getEntryComments->fetchAll();
             return $entryComments;
         }
@@ -90,7 +85,6 @@ class EntriesController
     {
         $deleteOne = $this->db->prepare('DELETE FROM entries WHERE entryID = :id');
         $deleteOne->execute([':id' => $id]);
-      /*  return $deleteOne->fetch();*/
     }
 
     public function update($id,$body)
@@ -101,15 +95,12 @@ class EntriesController
 
     public function add($entry)
     {
-        /**
-         * Default 'completed' is false so we only need to insert the 'content'
-         */
         $newDate= date("Y-m-d H:i:s", strtotime('+2 hours'));
 
         $addOne = $this->db->prepare(
             'INSERT INTO entries (title, content, createdBy, createdAt) VALUES (:title, :content, :createdBy, :createdAt)'
         );
-
+        
         /**
          * Insert the value from the parameter into the database
          */

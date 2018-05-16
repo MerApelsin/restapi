@@ -58,11 +58,9 @@ $app->post('/login', function ($request, $response, $args) {
      */
     $body = $request->getParsedBody();
     $fetchUserStatement = $this->db->prepare('SELECT * FROM users WHERE username = :username');
-    $fetchUserStatement->execute([
-        ':username' => $body['username']
-    ]);
+    $fetchUserStatement->execute([':username' => $body['username']]);
     $user = $fetchUserStatement->fetch();
-       /*  die(var_dump($_SESSION));*/
+
     if (password_verify($body['password'], $user['password'])) {
         $_SESSION['loggedIn'] = true;
         $_SESSION['userID'] = $user['userID'];
@@ -70,29 +68,27 @@ $app->post('/login', function ($request, $response, $args) {
         $cookie_value = $_SESSION['userID'];
         setcookie($cookie_name, $cookie_value, time() + (86400 * 30), '/'); // 86400 = 1 day
       
-        if(isset($_SESSION['loggedIn'])){
-        /*    return $response->withJson('logged in is set');*/
-        }
         return $response->withJson(['data' => [ $user['userID'], $user['username'] ]]);
     }
     return $response->withJson(['error' => 'wrong password']);
 });
-
 
 /**
  * Basic implementation, implement a better response
  */
 $app->get('/logout', function ($request, $response, $args) {
     // No request data is being sent
-    if($_SESSION['loggedIn'] == true){
-    session_destroy();
-    $cookie_name = 'userID';
-    unset($_COOKIE[$cookie_name]);
-// empty value and expiration one hour before
-$res = setcookie($cookie_name, '', time() - 3600);
-    return $response->withJson('Success');
+    if($_SESSION['loggedIn'] == true)
+    {
+        session_destroy();
+        $cookie_name = 'userID';
+        unset($_COOKIE[$cookie_name]);
+        // empty value and expiration one hour before
+        $res = setcookie($cookie_name, '', time() - 3600);
+        return $response->withJson('Success');
     }
-    else{
+    else
+    {
         return $response->withJson('You are not login!!');
     }
 });
@@ -111,18 +107,17 @@ $app->group('/api', function () use ($app) {
          * in 'App/container.php'. This makes it easier for us to call the database
          * inside our routes.
          */
-        // $this === $app
-      /*  $executeParams = [];*/
+        //Get querys
         $query = $request->getQueryParams();
 
+        //check if user has set own limit - if yes use that else use 20
         if (isset($query['limit'])){
             $limit = $query['limit'];
         }
         else{
              $limit= 20; 
         }
-
-
+        //Checks if the user is trying to search for a entry using title
         if (isset($query['title'])){
             $title = $query['title'];
         }
@@ -149,26 +144,25 @@ $app->group('/api', function () use ($app) {
         return $response->withJson(['data' => $singleEntry]);
     });
 
-       $app->patch('/entries/{id}', function ($request, $response, $args){
+    $app->patch('/entries/{id}', function ($request, $response, $args){
         
         $id = $args['id'];
         $body = $request->getParsedBody();
         $newEntry = $this->entries->update($id, $body);
         return $response->withJson(['data' => $newEntry]);
     });
-        $app->delete('/entries/{id}', function ($request, $response, $args) {
+    $app->delete('/entries/{id}', function ($request, $response, $args) {
 
         $id = $args['id'];
         $singleEntry = $this->entries->deleteOne($id);
         return $response->withJson(['data' => $singleEntry]);
     });
 
-        $app->get('/entries/{id}/comments', function ($request, $response, $args) {
+    $app->get('/entries/{id}/comments', function ($request, $response, $args) {
 
-            $query = $request->getQueryParams();
+        $query = $request->getQueryParams();
 
-            if (isset($query['limit'])){
-
+        if (isset($query['limit'])){
             $limit = $query['limit'];
             $entryComments = $this->entries->getEntryComments($args['id'], $limit);
             return $response->withJson($entryComments);
@@ -216,12 +210,10 @@ $app->group('/api', function () use ($app) {
     });
 
    $app->get('/users/{id}/posts', function ($request, $response, $args) {
-      /*  $userPosts = $this->users->getUserPosts($args['id']);
-        return $response->withJson($userPosts);*/
         $query = $request->getQueryParams();
-
-            if (isset($query['limit'])){
-
+            //check if user set limit and use that, else dont
+        if (isset($query['limit']))
+        {
             $limit = $query['limit'];
             $userPosts = $this->users->getUserPosts($args['id'], $limit);
             return $response->withJson($userPosts);
@@ -233,30 +225,34 @@ $app->group('/api', function () use ($app) {
         }
     });
     //Comments
-        $app->get('/comments', function ($request, $response, $args) {
+    $app->get('/comments', function ($request, $response, $args) {
         $query = $request->getQueryParams();
 
-        if (isset($query['limit'])){
+        if (isset($query['limit']))
+        {
             $limit = $query['limit'];
         }
-        else{
+        else
+        {
              $limit= 20; 
         }
 
         $allComments = $this->comments->getAll($limit);
         return $response->withJson($allComments);
     });
-        $app->get('/comments/{id}', function ($request, $response, $args) {
+
+    $app->get('/comments/{id}', function ($request, $response, $args) {
         $allUsers = $this->comments->getOne($args['id']);
         return $response->withJson($allUsers);
     });
-        $app->post('/comments', function ($request, $response, $args) {
+
+    $app->post('/comments', function ($request, $response, $args) {
         $body = $request->getParsedBody();
         $newComment = $this->comments->add($body);
         return $response->withJson(['data' => $newComment]);
     });
-        $app->delete('/comments/{id}', function ($request, $response, $args) {
 
+    $app->delete('/comments/{id}', function ($request, $response, $args) {
         $id = $args['id'];
         $singleEntry = $this->comments->deleteOne($id);
         return $response->withJson(['data' => $singleEntry]);

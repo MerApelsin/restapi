@@ -56,6 +56,15 @@ p
     line-height: 1.5em;
     letter-spacing: 0.01em;
 }
+#searchResult
+{
+  width: 65%;
+}
+.addLimit input
+{
+    width: 5em;
+    height: 3em;
+}
 .logout
 {
   display:flex;
@@ -75,21 +84,42 @@ p
 }
 .searchField input
 {
-    height: 4em;
+    height: 3em;
 }
 .searchField button
 {
-    width: 4em;
-    height: 4em;
+    width: 3em;
+    height: 3em;
     margin: 0em;
 }
-.signin, .register, .post-newEntry
+.searchField img
+{
+ width: 90%;
+ height: 90%;
+}
+.signin, .register
 {
     width: 40%;
     padding: 1em 2em;
     align-self: center;
     outline: none;
 }
+.post-newEntry
+{
+    background: linear-gradient(to bottom right,#101416,#252d32);
+    border: 0.5px solid gray;
+    border-radius: 0.25em;
+    -webkit-box-shadow: 10px 10px 12px 0px rgba(0,0,0,0.35);
+    -moz-box-shadow: 10px 10px 12px 0px rgba(0,0,0,0.35);
+    box-shadow: 10px 10px 12px 0px rgba(0,0,0,0.35);
+    width: 40%;
+    margin-bottom: 2em;
+    padding: 4em 1em 2em 1em;
+    align-self: center;
+    outline: none;
+}
+
+
 .post-article
 {
     display: flex;
@@ -240,14 +270,29 @@ input[type="text"]::-webkit-input-placeholder
 }
 
 @media only screen and (max-width: 767px) {
- .login-wrapper
- {
-    display: flex;
-    flex-direction: column;
-
-}
-.signin, .register, .post-newEntry
-{
-  width: 100%;
-}
+    
+    .login-wrapper
+    {
+        display: flex;
+        flex-direction: column;
+    }
+   .signin, .register, .post-newEntry
+    {
+        width: 100%;
+    }
+    .button-wrapper button 
+    {
+        width: 80%;
+    }
+    .button-wrapper 
+    {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+    }
+    .getPosts-wrapper 
+    {
+        width: 80%;
+    }
 }

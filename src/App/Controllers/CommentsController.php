@@ -30,28 +30,26 @@ class CommentsController
     {
         $deleteOne = $this->db->prepare('DELETE FROM comments WHERE commentID = :id');
         $deleteOne->execute([':id' => $id]);
-      /*  return $deleteOne->fetch();*/
     }
 
     public function add($comments)
-    {
-         $newDate= date("Y-m-d H:i:s", strtotime('+2 hours'));
+    {    // fetches current datetime into Swedish datetime.
+         $newDate= date("Y-m-d H:i:s", strtotime('+2 hours')); 
 
-        $addOne = $this->db->prepare(
-            'INSERT INTO comments (entryID, content, createdBy, createdAt) VALUES (:entryID, :content, :createdBy, :createdAt)'
+         $addOne = $this->db->prepare(
+          'INSERT INTO comments (entryID, content, createdBy, createdAt) VALUES (:entryID, :content, :createdBy, :createdAt)'
         );
 
-        $addOne->execute([':entryID' => $comments['entryID'], 
-           ':content'  => $comments['content'],
-          ':createdBy' => $comments['createdBy'],
-          ':createdAt' => $newDate
+         $addOne->execute([':entryID' => $comments['entryID'], 
+           ':content'   => $comments['content'],
+           ':createdBy' => $comments['createdBy'],
+           ':createdAt' => $newDate
           ]);
 
-        return [
-         /* 'id'          => (int)$this->db->lastInsertId(),*/
-          ':content'     => $entry['content'],
-          ':createdBy'  => $comments['createdBy'], 
-          ':createdAt' => $newDate
+         return [
+           ':content'   => $entry['content'],
+           ':createdBy' => $comments['createdBy'], 
+           ':createdAt' => $newDate
         ];
     }
 }
