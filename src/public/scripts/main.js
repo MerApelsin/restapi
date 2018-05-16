@@ -1,4 +1,8 @@
 document.getElementById("update").style.display="none";
+document.getElementById("searchResult").style.display = "none";
+document.getElementById("renderEntries").style.display = "none";
+document.getElementById("renderComments").style.display = "none";
+document.getElementById("renderUsers").style.display = "none";
 
 function main(){
   fetch('api/entries',{
@@ -18,10 +22,18 @@ function search(){
     credentials:'include'
   })
   .then(res => res.json())
-  .then(res => createArticle(res));
+  .then(res => createArticle(res, "searchResult"));
  }
 }
 function getAllUsers(){
+  document.getElementById("renderUsers").style.display = "block";
+  document.getElementById("searchResult").style.display = "none";
+  document.getElementById("renderEntries").style.display = "none";
+  document.getElementById("renderComments").style.display = "none";
+
+  document.getElementById("renderUsers").innerHTML = "";
+
+  const mainParent = document.getElementById("renderUsers");
   fetch('api/users',{
     credentials: 'include'
   })
@@ -38,13 +50,28 @@ function getAllUsers(){
           const textNode1 = document.createTextNode(text1);
           tag1.appendChild(textNode1);
           article.appendChild(tag1);
-          document.getElementById("getPosts-wrapper").appendChild(article);
+          mainParent.appendChild(article);
         }
     });
 }
 
-function createArticle(res){
-
+function createArticle(res,name){
+  document.getElementById(name).innerHTML = "";
+  if (name == "renderEntries"){
+    document.getElementById("searchResult").style.display = "none";
+    document.getElementById("renderEntries").style.display = "block";
+    document.getElementById("renderComments").style.display = "none";
+    document.getElementById("renderUsers").style.display = "none";
+  }
+  else{
+    document.getElementById("searchResult").style.display = "block";
+    document.getElementById("renderEntries").style.display = "none";
+    document.getElementById("renderComments").style.display = "none";
+    document.getElementById("renderUsers").style.display = "none";
+  }
+    const mainParent = document.getElementById(name);
+    console.log(mainParent);
+    console.log(name);
    for (let i = 0; i < res.data.length; i++)
         {
           const article = document.createElement("post-wrapper");
@@ -108,7 +135,7 @@ function createArticle(res){
           commentButton.onclick = function(){ getTextValue(entryId);}
           //Add Eventlistner..".// res.data[i].entryID*/
           article.appendChild(commentButton);
-
+          mainParent.appendChild(article);
         }
 }
 
@@ -117,7 +144,7 @@ function getAllEntries(){
     credentials: 'include'
   } )
   .then(res => res.json())
-  .then(res => createArticle(res));
+  .then(res => createArticle(res, "renderEntries"));
 }
 
 function getComments(entryId){
@@ -126,7 +153,7 @@ function getComments(entryId){
     credentials: 'include'
   } )
   .then(res => res.json())
-  .then(res => createComments(res));
+  .then(res => createComments(res,entryId));
 }
 
 function getTextValue(id){
@@ -141,10 +168,23 @@ function getAllComments(){
     credentials: 'include'
   })
     .then(res => res.json())
-        .then(res => {createComments(res)});
+        .then(res => {createComments(res,"renderComments")});
 }
-function createComments(res){
-
+function createComments(res,name){
+  if (name == "renderComments"){
+    document.getElementById(name).innerHTML = "";
+    document.getElementById("searchResult").style.display = "none";
+    document.getElementById("renderEntries").style.display = "none";
+    document.getElementById("renderComments").style.display = "block";
+    document.getElementById("renderUsers").style.display = "none";
+  }
+  else{
+    document.getElementById("searchResult").style.display = "none";
+    document.getElementById("renderEntries").style.display = "block";
+    document.getElementById("renderComments").style.display = "none";
+    document.getElementById("renderUsers").style.display = "none";
+  }
+    const mainParent = document.getElementById(name);
     for (let i = 0; i < res.length; i++)
         {
           const article = document.createElement("post-wrapper");
@@ -169,6 +209,7 @@ function createComments(res){
           deleteBtn.setAttribute("class", "btn");
           deleteBtn.onclick = function() {deleteComment(id);}
           article.appendChild(deleteBtn);
+          mainParent.appendChild(article);
         }
     };
 

@@ -1,13 +1,13 @@
-html 
+html
 {
   box-sizing: border-box;
 }
-*, *:before, *:after 
+*, *:before, *:after
 {
   box-sizing: inherit;
 }
 body
-{  
+{
     background-color: #f4f4f4;
     width:100%;
     text-align:center;
@@ -28,6 +28,7 @@ header
 	flex-direction: column;
     width: 100%;
     margin-top: 2em;
+    align-items: center;
 }
 h1
 {
@@ -93,7 +94,7 @@ p
 {
     display: flex;
     flex-direction: column;
-    align-items: center;    
+    align-items: center;
     color: gray;
     margin: 4em 0em;
 }
@@ -104,7 +105,7 @@ p
     flex-direction: row;
     padding: 2em 0em;
     margin: 2em 0em;
-} 
+}
 .getIt
 {
     background-color: #ffffff;
@@ -126,15 +127,14 @@ p
     display: flex;
     justify-content: center;
     flex-direction: column;
-    align-items: center;
+    width: 65%;
 
 }
 .post-wrapper
-{ 
+{
     display: flex;
     flex-direction: column;
     align-items: center;
-    width:50%;
     margin-bottom: 2em;
     padding:2em;
     border:1px solid gray;
@@ -199,7 +199,7 @@ input[type=submit]:active, #addTodo:active, button:active, .btn:active
             box-shadow: 0 1px #666;
   -webkit-transform: translateY(3px);
       -ms-transform: translateY(3px);
-          transform: translateY(3px); 
+          transform: translateY(3px);
 }
 textarea:focus , input:focus
 {
@@ -251,4 +251,3 @@ input[type="text"]::-webkit-input-placeholder
   width: 100%;
 }
 }
-
