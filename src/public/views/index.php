@@ -6,22 +6,32 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <link rel="stylesheet" href="css/style.css">
+  <link href='https://fonts.googleapis.com/css?family=Quicksand' rel='stylesheet'>
   <title>Frontpage</title>
 </head>
 
 <body>
-  <div class= "logout">
-    <button onclick="logout()">Logout</button>
-  </div>
-  <h1>cms</h1>
-  <div class ="searchField">
-     <input type ="text" id="search" placeholder="Search title"/>
-     <button id ="searchBtn"><img src = "../magnifying-glass.png"></button>
-  </div>
+<div class = "header-wrapper">
+<div class = "search-wrapper">
+   <div class ="searchField">
+      <input type ="text" id="search" placeholder="Search title"/>
+      <button id ="searchBtn"><img src = "../magnifying-glass.png"></button>
+   </div>
+   <div class= "logout">
+      <button onclick="logout()">Logout</button>
+   </div>
+</div>
+
+    <div class ="error-wrapper">
   <p id= "errorMessage"></p>
   <div class= "article-wrapper">
      <div id="searchResult"></div>
   </div>
+  </div>
+  <div class = "h1-background">
+  <h1>cms</h1>
+  </div>
+  </div><!--header-wrapper-->
 
   <input type="hidden" name ="userID" id ="hiddenField" value= "<?php echo $_SESSION['userID']?>"/>
 

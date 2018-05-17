@@ -13,12 +13,16 @@ function search()
 
   if ( searchTerm.length >0)
   {
+    document.getElementById("errorMessage").innerHTML = "";
+    document.getElementById("errorMessage").style.display = "none";
     fetch(url, { credentials:'include'})
     .then(res => res.json())
     .then(res => createArticle(res, "searchResult"));
   }
   else
   {
+    document.getElementById("searchResult").innerHTML = "";
+    document.getElementById("errorMessage").style.display = "block";
     document.getElementById("errorMessage").innerHTML = "Write something!";
   }
 }
@@ -106,11 +110,14 @@ function createArticle(res,name)
           article.appendChild(tag1);
           document.getElementById("getPosts-wrapper").appendChild(article);
 
+          const textDiv = document.createElement("div");
+          textDiv.setAttribute("class", "textDiv");
           const content = document.createElement("p");
           const text2 = res.data[i].content;
           const textNode2 = document.createTextNode(text2);
           content.appendChild(textNode2);
-          article.appendChild(content);
+          textDiv.appendChild(content);
+          article.appendChild(textDiv);
           document.getElementById("getPosts-wrapper").appendChild(article);
 
           const btnWrapper = document.createElement("div");
@@ -247,11 +254,20 @@ function createComments(res,name)
           article.setAttribute("class", "post-wrapper");
           const id = res[i].commentID;
          
+          const tag = document.createElement("h3");
+          const text = "Comment";
+          const textNode = document.createTextNode(text);
+          tag.appendChild(textNode);
+          article.appendChild(tag);
+
+          const textDiv = document.createElement("div");
+          textDiv.setAttribute("class", "textDiv");
           const tag1 = document.createElement("p");
           const text1 = res[i].content;
           const textNode1 = document.createTextNode(text1);
           tag1.appendChild(textNode1);
-          article.appendChild(tag1);
+          textDiv.appendChild(tag1);
+          article.appendChild(textDiv);
           document.getElementById("getPosts-wrapper").appendChild(article);
 
           const deleteBtn = document.createElement("input");
@@ -260,6 +276,10 @@ function createComments(res,name)
           deleteBtn.setAttribute("class", "btn");
           deleteBtn.onclick = function() {deleteComment(id);}
           article.appendChild(deleteBtn);
+
+          const divider = document.createElement("div");
+          divider.setAttribute("class", "divider");
+          article.appendChild(divider);
           mainParent.appendChild(article);
     }
 };
