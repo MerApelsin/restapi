@@ -72,6 +72,10 @@ p
 {
     transform:skewY(3deg);
 }
+#searchResult p 
+{
+    transform: skewY(0deg);
+}
 .header-wrapper
 {
     background-color: #ffffff;
