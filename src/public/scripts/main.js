@@ -140,7 +140,7 @@ function createArticle(res,name)
 
           const commentBtn = document.createElement("input");
           commentBtn.setAttribute("type", "button");
-          commentBtn.setAttribute("value", "comment");
+          commentBtn.setAttribute("value", "comments");
           commentBtn.setAttribute("class", "btn");
           //create a button which gets the entryID for fetching its comments
           //Anonymous function to handle arguments, a function calling another function.

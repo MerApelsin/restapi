@@ -18,14 +18,14 @@ body
 }
 header
 {
-	  background:linear-gradient(to bottom, #1a2023, #000000);
+	background:linear-gradient(to bottom, #1a2023, #000000);
     padding: 2em;
 }
 .article-wrapper
 {
-	  display: flex;
-	  justify-content: center;
-	  flex-direction: column;
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
     align-items: center;
     width: 100%;
     margin-top: 2em;
@@ -33,7 +33,7 @@ header
 h1
 {
     font-family:"Quicksand";
-	  color:gray;
+	color:gray;
     text-transform:uppercase;
     font-size: 4em;
     padding-bottom: 2.5em;
@@ -43,13 +43,13 @@ h1
 }
 h2
 {
-	  color:#DCD0C0;
+	color:#DCD0C0;
     margin: 1em 0em 2em 0em;
 }
 h3
 {
     color: #DCD0C0;
-	  margin-bottom: 2em;
+	margin-bottom: 2em;
 }
 p
 {
@@ -63,7 +63,6 @@ p
 }
 .textDiv
 {
-    text-align: justify;
     word-break: break-all;
     padding: 0em 2.5em;
     margin-bottom: 2em;
@@ -260,7 +259,11 @@ label
 {
     display: none;
 }
-input[type=submit], #addTodo, button, .btn
+.signin input[type=submit], .register input[type=submit], .post-newEntry input[type=submit], .post-wrapper input[type=submit]
+{
+    width:90%;
+}
+input[type=submit], button, .btn
 {
     background:linear-gradient(to bottom, #252d32, #000000);
     color: #f4f4f4;
@@ -273,11 +276,11 @@ input[type=submit], #addTodo, button, .btn
             box-shadow: 0 2px #999;
     cursor: pointer;
 }
-input[type=submit]:hover, #addTodo:hover, button:hover, .btn:hover
+input[type=submit]:hover, button:hover, .btn:hover
 {
     background: linear-gradient(to bottom right,#101416,#354047);
 }
-input[type=submit]:active, #addTodo:active, button:active, .btn:active
+input[type=submit]:active, button:active, .btn:active
 {
     background: linear-gradient(to bottom right,#101416,#000000);
     -webkit-box-shadow: 0 1px #666;
@@ -289,10 +292,6 @@ input[type=submit]:active, #addTodo:active, button:active, .btn:active
 textarea:focus , input:focus
 {
     background-color: #ffffff;
-}
-#addTodo
-{
-    width: 90%;
 }
 input
 {
@@ -326,14 +325,63 @@ input[type="text"]::-webkit-input-placeholder
 
 @media only screen and (max-width: 767px) {
     
+    h2
+    {
+        font-size: 1.25em;
+    }
+    .search-wrapper
+    {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        margin: 4em 2em;
+    }
+    .logout button 
+    {
+        width: 100%;
+    }
     .login-wrapper
     {
         display: flex;
         flex-direction: column;
     }
-   .signin, .register, .post-newEntry
+    .post-newEntry, input[type=submit]
+    {
+        width: 90%;
+    }
+   .signin, .register
+    {
+        width: 90%;
+        padding: 0em 0em; 
+    }
+    #searchResult
+    {
+        width: 90%;
+    }
+    .btn-wrapper
+    {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+        width: 90%;
+    }
+    .btn
     {
         width: 100%;
+        margin: 0em 0em 1em 0em;
+    }
+    .button-wrapper button
+    {
+        margin: 1em 1em;
+    }
+    .textDiv
+    {
+        padding: 0em 0em; 
+        margin-bottom: 0em;
+    }
+    textarea 
+    {
+        width: 90%;
     }
     .button-wrapper button 
     {
@@ -350,4 +398,10 @@ input[type="text"]::-webkit-input-placeholder
     {
         width: 80%;
     }
+    .post-wrapper
+    {
+        padding: 1em;
+        margin-top: 0em;
+    }
+
 }
