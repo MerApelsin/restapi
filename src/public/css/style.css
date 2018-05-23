@@ -259,15 +259,19 @@ label
 {
     display: none;
 }
-.signin input[type=submit], .register input[type=submit], .post-newEntry input[type=submit], .post-wrapper input[type=submit]
+.commentDiv
+{
+    width: 100%;
+}
+.signin input[type=submit], .register input[type=submit], .post-newEntry input[type=submit], .post-wrapper input[type=submit] 
 {
     width:90%;
 }
 input[type=submit], button, .btn
 {
+    width:30%;
     background:linear-gradient(to bottom, #252d32, #000000);
     color: #f4f4f4;
-    width: 30%;
     margin:0em 0em 4em 0em;
     padding:0.8em;
     border-radius: 0.5em;

@@ -165,6 +165,7 @@ function createArticle(res,name)
 
           const commentDiv = document.createElement("div");
           commentDiv.setAttribute("id", "comment"+entryId);
+          commentDiv.setAttribute("class", "commentDiv");
           article.appendChild(commentDiv);
 
           mainParent.appendChild(article);
@@ -199,6 +200,7 @@ function getTextValue(id)
     const getTextValue = document.getElementById(id).getElementsByTagName("textarea")[0];
     const userID = document.getElementById("hiddenField").value;
     const textValue = getTextValue.value;
+    document.getElementById(id).getElementsByTagName("textarea")[0].value = "";
     postComment(id, textValue, userID);
 }
 
