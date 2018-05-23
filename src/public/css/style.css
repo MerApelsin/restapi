@@ -1,10 +1,10 @@
 html
 {
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
 *, *:before, *:after
 {
-  box-sizing: inherit;
+    box-sizing: inherit;
 }
 body
 {
@@ -13,7 +13,7 @@ body
     text-align:center;
     font-family: "Oak Light",'Montserrat', sans-serif;
     margin: 0;
-    padding:0;
+    padding: 0;
     line-height: 1.5em;
 }
 header
@@ -26,25 +26,29 @@ header
 	display: flex;
 	justify-content: center;
 	flex-direction: column;
+    align-items: center;
     width: 100%;
     margin-top: 2em;
-    align-items: center;
 }
 h1
 {
+    font-family:"Quicksand";
 	color:gray;
     text-transform:uppercase;
-    font-size: 3em;
-	margin-top: 1.5em;
+    font-size: 4em;
+    padding-bottom: 2.5em;
+    margin-top: 0em;
+    transform: skewY(3deg);
     text-shadow: 3px 3px 2px rgba(150, 150, 150, 0.21);
 }
 h2
 {
 	color:#DCD0C0;
-    margin: 0em 0em 2em 0em;
+    margin: 1em 0em 2em 0em;
 }
 h3
 {
+    color: #DCD0C0;
 	margin-bottom: 2em;
 }
 p
@@ -55,10 +59,33 @@ p
     font-weight: normal;
     line-height: 1.5em;
     letter-spacing: 0.01em;
+    margin-bottom: 2em;
+}
+.textDiv
+{
+    word-break: break-all;
+    padding: 0em 2.5em;
+    margin-bottom: 2em;
+}
+.error-wrapper p
+{
+    transform:skewY(3deg);
+}
+#searchResult p 
+{
+    transform: skewY(0deg);
+}
+.header-wrapper
+{
+    background-color: #ffffff;
+    padding-top:2em;
+    transform: skewY(-3deg);
+    margin-top:-2em;
 }
 #searchResult
 {
-  width: 65%;
+    width: 65%;
+    transform: skewY(3deg);
 }
 .addLimit input
 {
@@ -67,20 +94,27 @@ p
 }
 .logout
 {
-  display:flex;
-  justify-content: flex-end;
+    display:flex;
+    justify-content: flex-end;
 }
 .logout button
 {
-  width: 10em;
-  margin:2em;
+    width: 10em;
+}
+.search-wrapper
+{
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    margin: 4em 4em;
+    transform: skewY(3deg);
 }
 .searchField
 {
-  display: flex;
-  flex-direction: row;
-  margin-left: 5em;
-  margin-right: 5em;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
 }
 .searchField input
 {
@@ -94,8 +128,8 @@ p
 }
 .searchField img
 {
- width: 90%;
- height: 90%;
+    width: 90%;
+    height: 90%;
 }
 .signin, .register
 {
@@ -114,12 +148,14 @@ p
     box-shadow: 10px 10px 12px 0px rgba(0,0,0,0.35);
     width: 40%;
     margin-bottom: 2em;
-    padding: 4em 1em 2em 1em;
+    padding: 4em 1em;
     align-self: center;
     outline: none;
 }
-
-
+.post-newEntry input[type=submit]
+{
+    margin: 1em auto;
+}
 .post-article
 {
     display: flex;
@@ -158,33 +194,57 @@ p
     justify-content: center;
     flex-direction: column;
     width: 65%;
-
 }
 .post-wrapper
-{
+{    
+    background: linear-gradient(to bottom right,#101416,#252d32);
     display: flex;
     flex-direction: column;
     align-items: center;
     margin-bottom: 2em;
+    margin-top: 4em;
     padding:2em;
     border:1px solid gray;
     border-radius:0.5em;
+    -webkit-box-shadow: 10px 10px 12px 0px rgba(0,0,0,0.35);
+    -moz-box-shadow: 10px 10px 12px 0px rgba(0,0,0,0.35);
+    box-shadow: 10px 10px 12px 0px rgba(0,0,0,0.35);
+}
+.post-wrapper .post-wrapper
+{
+    margin: 1em;
+    border:none;
+    background:transparent;
+    box-shadow: none;
+}
+.postwrapper .postwrapper input
+{
+    margin-bottom: 0em;
+}
+.divider
+{
+    width: 4em;
+    height: 2px;
+    background-color: gray;
 }
 .post-wrapper h4
 {
- margin-bottom: 2em;
+    color:#DCD0C0;
+    margin-bottom: 1em;
 }
 .btn-wrapper
 {
     display: flex;
     flex-direction: row;
-    width: 100%;
+    justify-content: space-evenly;
+    width: 90%;
 }
 textarea
 {
     width: 90%;
     height: 10em;
     padding: 0.5em;
+    margin-bottom: 2em;
     border-radius: 0.5em;
     border: 2px inset;
     outline: none;
@@ -193,17 +253,21 @@ textarea
 }
 textarea:focus , input:focus
 {
-  background-color: #ffffff;
+    background-color: #ffffff;
 }
 label
 {
     display: none;
 }
-input[type=submit], #addTodo, button, .btn
+.signin input[type=submit], .register input[type=submit], .post-newEntry input[type=submit], .post-wrapper input[type=submit]
+{
+    width:90%;
+}
+input[type=submit], button, .btn
 {
     background:linear-gradient(to bottom, #252d32, #000000);
     color: #f4f4f4;
-    width: 90%;
+    width: 30%;
     margin:0em 0em 4em 0em;
     padding:0.8em;
     border-radius: 0.5em;
@@ -212,32 +276,22 @@ input[type=submit], #addTodo, button, .btn
             box-shadow: 0 2px #999;
     cursor: pointer;
 }
-input[type=submit]:hover, #addTodo:hover, button:hover, .btn:hover
+input[type=submit]:hover, button:hover, .btn:hover
 {
-  background: -webkit-gradient(linear,left top, right bottom,from(#101416),to(#354047));
-  background: -webkit-linear-gradient(top left,#101416,#354047);
-  background: -o-linear-gradient(top left,#101416,#354047);
-  background: linear-gradient(to bottom right,#101416,#354047);
+    background: linear-gradient(to bottom right,#101416,#354047);
 }
-input[type=submit]:active, #addTodo:active, button:active, .btn:active
+input[type=submit]:active, button:active, .btn:active
 {
-  background: -webkit-gradient(linear,left top, right bottom,from(#101416),to(#000000));
-  background: -webkit-linear-gradient(top left,#101416,#000000);
-  background: -o-linear-gradient(top left,#101416,#000000);
-  background: linear-gradient(to bottom right,#101416,#000000);
+    background: linear-gradient(to bottom right,#101416,#000000);
     -webkit-box-shadow: 0 1px #666;
             box-shadow: 0 1px #666;
-  -webkit-transform: translateY(3px);
+    -webkit-transform: translateY(3px);
       -ms-transform: translateY(3px);
           transform: translateY(3px);
 }
 textarea:focus , input:focus
 {
-  background-color: #ffffff;
-}
-#addTodo
-{
-    width: 90%;
+    background-color: #ffffff;
 }
 input
 {
@@ -260,25 +314,74 @@ input[type="text"]::-webkit-input-placeholder
 }
 :-ms-input-placeholder
 { /* IE 10+ */
-   font-family: "Plantin Light", sans-serif;
-   color:gray;
+      font-family: "Plantin Light", sans-serif;
+      color:gray;
 }
 :-moz-placeholder
 { /* Firefox 18- */
-     font-family: "Plantin Light", sans-serif;
-     color:gray;
+      font-family: "Plantin Light", sans-serif;
+      color:gray;
 }
 
 @media only screen and (max-width: 767px) {
     
+    h2
+    {
+        font-size: 1.25em;
+    }
+    .search-wrapper
+    {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        margin: 4em 2em;
+    }
+    .logout button 
+    {
+        width: 100%;
+    }
     .login-wrapper
     {
         display: flex;
         flex-direction: column;
     }
-   .signin, .register, .post-newEntry
+    .post-newEntry, input[type=submit]
+    {
+        width: 90%;
+    }
+   .signin, .register
+    {
+        width: 90%;
+        padding: 0em 0em; 
+    }
+    #searchResult
+    {
+        width: 90%;
+    }
+    .btn-wrapper
+    {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+        width: 90%;
+    }
+    .btn
     {
         width: 100%;
+        margin: 0em 0em 1em 0em;
+    }
+    .button-wrapper button
+    {
+        margin: 1em 1em;
+    }
+    .textDiv
+    {
+        padding: 0em 0em; 
+        margin-bottom: 0em;
+    }
+    textarea 
+    {
+        width: 90%;
     }
     .button-wrapper button 
     {
@@ -295,4 +398,10 @@ input[type="text"]::-webkit-input-placeholder
     {
         width: 80%;
     }
+    .post-wrapper
+    {
+        padding: 1em;
+        margin-top: 0em;
+    }
+
 }

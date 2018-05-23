@@ -11,14 +11,29 @@ function search()
   const searchTerm = document.getElementById("search").value;
   const url = 'api/entries?title=' + searchTerm;
 
-  if ( searchTerm.length >0)
+  if ( searchTerm.length > 0)
   {
+    document.getElementById("errorMessage").innerHTML = "";
+    document.getElementById("errorMessage").style.display = "none";
     fetch(url, { credentials:'include'})
     .then(res => res.json())
-    .then(res => createArticle(res, "searchResult"));
+    .then((res) => {
+      if(!res.data.length)
+      {
+        document.getElementById("searchResult").innerHTML = "";
+        document.getElementById("errorMessage").style.display = "block";
+        document.getElementById("errorMessage").innerHTML = "No results for this query!";
+      }
+      else
+      {
+        createArticle(res, "searchResult");
+      }
+    })
   }
   else
   {
+    document.getElementById("searchResult").innerHTML = "";
+    document.getElementById("errorMessage").style.display = "block";
     document.getElementById("errorMessage").innerHTML = "Write something!";
   }
 }
@@ -35,23 +50,12 @@ function getAllUsers()
 
   const mainParent = document.getElementById("renderUsers");
 
-
-  //check limit input
-  let url = "";
-  const limitValue = document.getElementById("limitInput").value;
-
-  if ( limitValue >0)
-  {
-    url = "api/users?limit="+limitValue;
-  }
-  else
-  {
-    url = "api/users";
-  }
+  //Get url for fetch depending on if limit is set or not
+  let url = getLimit("api/users");
 
   fetch(url,{credentials: 'include'})
     .then(res => res.json())
-    .then(res => 
+    .then(res =>
       {
           //Render the result
           for (let i = 0; i < res.length; i++)
@@ -90,7 +94,7 @@ function createArticle(res,name)
     document.getElementById("renderUsers").style.display = "none";
   }
   const mainParent = document.getElementById(name);
-  
+
    for (let i = 0; i < res.data.length; i++)
         {
           const article = document.createElement("div");
@@ -106,11 +110,14 @@ function createArticle(res,name)
           article.appendChild(tag1);
           document.getElementById("getPosts-wrapper").appendChild(article);
 
+          const textDiv = document.createElement("div");
+          textDiv.setAttribute("class", "textDiv");
           const content = document.createElement("p");
           const text2 = res.data[i].content;
           const textNode2 = document.createTextNode(text2);
           content.appendChild(textNode2);
-          article.appendChild(content);
+          textDiv.appendChild(content);
+          article.appendChild(textDiv);
           document.getElementById("getPosts-wrapper").appendChild(article);
 
           const btnWrapper = document.createElement("div");
@@ -133,9 +140,10 @@ function createArticle(res,name)
 
           const commentBtn = document.createElement("input");
           commentBtn.setAttribute("type", "button");
-          commentBtn.setAttribute("value", "comment");
+          commentBtn.setAttribute("value", "comments");
           commentBtn.setAttribute("class", "btn");
           //create a button which gets the entryID for fetching its comments
+          //Anonymous function to handle arguments, a function calling another function.
           commentBtn.onclick = function() {getComments(entryId);}
           btnWrapper.appendChild(commentBtn);
 
@@ -165,16 +173,7 @@ function createArticle(res,name)
 function getAllEntries()
 {
   //render entries depending on if limit is set or not, default is 20
-    let url = "";
-    const limitValue = document.getElementById("limitInput").value;
-    if ( limitValue >0)
-    {
-        url = "api/entries?limit="+limitValue;
-    }
-    else
-    {
-        url = "api/entries";
-    }
+    let url = getLimit("api/entries");
     //sends the result and which div we want to render the result to
     fetch(url,{credentials: 'include'})
       .then(res => res.json())
@@ -203,16 +202,8 @@ function getTextValue(id)
 
 function getAllComments()
 {
-    let url = "";
-    const limitValue = document.getElementById("limitInput").value;
-    if (limitValue >0)
-    {
-        url = "api/comments?limit="+limitValue;
-    }
-    else
-    {
-        url = "api/comments";
-    }
+    let url = getLimit("api/comments");
+
     fetch(url,{credentials: 'include'})
         .then(res => res.json())
         .then(res => {createComments(res,"renderComments")});
@@ -232,7 +223,7 @@ function createComments(res,name)
     }
     else
     {
-        document.getElementById("comment"+name).innerHTML = ""; 
+        document.getElementById("comment"+name).innerHTML = "";
         document.getElementById("searchResult").style.display = "none";
         document.getElementById("renderEntries").style.display = "block";
         document.getElementById("renderComments").style.display = "none";
@@ -246,12 +237,21 @@ function createComments(res,name)
           const article = document.createElement("div");
           article.setAttribute("class", "post-wrapper");
           const id = res[i].commentID;
-         
+
+          const tag = document.createElement("h3");
+          const text = "Comment";
+          const textNode = document.createTextNode(text);
+          tag.appendChild(textNode);
+          article.appendChild(tag);
+
+          const textDiv = document.createElement("div");
+          textDiv.setAttribute("class", "textDiv");
           const tag1 = document.createElement("p");
           const text1 = res[i].content;
           const textNode1 = document.createTextNode(text1);
           tag1.appendChild(textNode1);
-          article.appendChild(tag1);
+          textDiv.appendChild(tag1);
+          article.appendChild(textDiv);
           document.getElementById("getPosts-wrapper").appendChild(article);
 
           const deleteBtn = document.createElement("input");
@@ -260,6 +260,10 @@ function createComments(res,name)
           deleteBtn.setAttribute("class", "btn");
           deleteBtn.onclick = function() {deleteComment(id);}
           article.appendChild(deleteBtn);
+
+          const divider = document.createElement("div");
+          divider.setAttribute("class", "divider");
+          article.appendChild(divider);
           mainParent.appendChild(article);
     }
 };
@@ -365,7 +369,7 @@ function postUser()
     const password = document.getElementById('passwordInput');
     formData.append('username', username.value);
     formData.append('password', password.value);
-  
+
     const postOptions = {
         method: 'POST',
         body: formData,
@@ -421,6 +425,23 @@ function logout()
   fetch('/logout', {credentials: 'include'})
     .then(res => res.json())
     .then(console.log);
+}
+
+//Fetches limit from input and adjusts fetch url(inpara) if there is a limit
+function getLimit(url)
+{
+  //Get limit from input and check if it's set to begin with
+  const limitValue = document.getElementById("limitInput").value;
+  if ( limitValue > 0)
+  {
+    //if set - adjust url and return the new one
+    return url+"?limit="+limitValue;
+  }
+  else
+  {
+    //else return as-is.
+    return url;
+  }
 }
 
 //BUTTONS AND THEIR EVENT LISTENERS AND STUFF
