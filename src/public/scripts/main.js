@@ -78,7 +78,7 @@ function createArticle(res,name)
   //add the result to that specific div
   //clear div to remove earlier results
   document.getElementById(name).innerHTML = "";
-
+  var isSearched = false;
   if (name == "renderEntries")
   {
     document.getElementById("searchResult").style.display = "none";
@@ -92,6 +92,7 @@ function createArticle(res,name)
     document.getElementById("renderEntries").style.display = "none";
     document.getElementById("renderComments").style.display = "none";
     document.getElementById("renderUsers").style.display = "none";
+    isSearched = true;
   }
   const mainParent = document.getElementById(name);
 
@@ -144,7 +145,7 @@ function createArticle(res,name)
           commentBtn.setAttribute("class", "btn");
           //create a button which gets the entryID for fetching its comments
           //Anonymous function to handle arguments, a function calling another function.
-          commentBtn.onclick = function() {getComments(entryId);}
+          commentBtn.onclick = function() {getComments(entryId,isSearched);}
           btnWrapper.appendChild(commentBtn);
 
           article.appendChild(btnWrapper);
@@ -180,13 +181,14 @@ function getAllEntries()
       .then(res => createArticle(res, "renderEntries"));
 }
 
-function getComments(entryId)
+function getComments(entryId,searchBool)
 {
   //fetches comment for specific entry and renders them for the div of the entry
+
     const url = 'api/entries/'+entryId+'/comments';
     fetch(url ,{credentials: 'include'})
       .then(res => res.json())
-      .then(res => createComments(res,entryId));
+      .then(res => createComments(res,entryId,searchBool));
 }
 
 function getTextValue(id)
@@ -206,11 +208,12 @@ function getAllComments()
 
     fetch(url,{credentials: 'include'})
         .then(res => res.json())
-        .then(res => {createComments(res,"renderComments")});
+        .then(res => {createComments(res,"renderComments",false)});
 }
 
-function createComments(res,name)
+function createComments(res,name,searchedBool)
 {
+
     var useName = "";
     if (name == "renderComments")
     {
@@ -220,6 +223,15 @@ function createComments(res,name)
         document.getElementById("renderComments").style.display = "block";
         document.getElementById("renderUsers").style.display = "none";
         useName = name;
+    }
+    else if(searchedBool == true)
+    {
+        document.getElementById("comment"+name).innerHTML = "";
+        document.getElementById("searchResult").style.display = "block";
+        document.getElementById("renderEntries").style.display = "none";
+        document.getElementById("renderComments").style.display = "none";
+        document.getElementById("renderUsers").style.display = "none";
+        useName = "comment"+name;
     }
     else
     {
